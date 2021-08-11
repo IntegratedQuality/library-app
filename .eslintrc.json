@@ -1,0 +1,48 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "jest": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings"
+  ],
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "root": true,
+  "rules": {
+    "max-lines-per-function": ["warn", 100],
+    "import/order": [
+      "warn",
+      {
+        "alphabetize": {
+          "order": "asc"
+        }
+      }
+    ],
+    "semi": ["warn", "always"],
+    "quotes": ["warn", "single"],
+    "indent": ["error", 2],
+    "no-unused-vars": "off",
+    "no-var": "error",
+    "padding-line-between-statements": [
+      "error",
+      {
+        "blankLine": "always",
+        "prev": "*",
+        "next": "return"
+      }
+    ]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".json", ".ts", ".tsx"]
+      }
+    }
+  }
+}
