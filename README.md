@@ -4,11 +4,12 @@
 
 ## 実行
 ```
-npm start
+docker-compose up
 ```
 
 ## push する前に
+src に移動してから(cd src)
 ```
-npm run test
+npm run lint
 ```
 をしてエラーやワーニングが出てないかチェック
