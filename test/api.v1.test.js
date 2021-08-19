@@ -83,7 +83,7 @@ describe('本の追加テスト', ()=>{
 describe('本の貸し出しテスト', ()=>{
   test('本を貸し借りできる',async ()=>{
     //貸出数
-    const total = (await request(app).get('/api/v1/rent_ret/1')).body.total;
+    const total = (await request(app).get('/api/v1/user/1/history')).body.total;
     //確認
     const res_info = await request(app).get('/api/v1/book/1');
     expect(res_info.body.is_rented).toBeFalsy();
@@ -96,7 +96,7 @@ describe('本の貸し出しテスト', ()=>{
     const res_info2 = await request(app).get('/api/v1/book/1');
     expect(res_info2.body.is_rented).toBeTruthy();
     //貸出数の増加
-    const res_retrent2 = await request(app).get('/api/v1/rent_ret/1');
+    const res_retrent2 = await request(app).get('/api/v1/user/1/history');
     expect(typeof res_retrent2.body.list[0].book_id).toBe('number');
     expect(typeof res_retrent2.body.list[0].user_id).toBe('number');
     expect(res_retrent2.body.list[0].rent_time).not.toBeNull();
@@ -111,7 +111,7 @@ describe('本の貸し出しテスト', ()=>{
     const res_info3 = await request(app).get('/api/v1/book/1');
     expect(res_info3.body.is_rented).toBeFalsy();
     //貸出関係図のnull埋め
-    const res_retrent3 = await request(app).get('/api/v1/rent_ret/1');
+    const res_retrent3 = await request(app).get('/api/v1/user/1/history');
     expect(res_retrent3.body.list[0].return_time).not.toBeNull();
   });
   test('無い本は貸せない',async ()=>{

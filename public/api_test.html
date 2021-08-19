@@ -126,7 +126,7 @@
     <script>
       document.getElementById('getuserret').addEventListener('click', async ()=>{
         const start = document.getElementById("user_retrentstart").value;
-        const URI = `/api/v1/rent_ret/${document.getElementById("user_id").value}?${new URLSearchParams({start})}`;
+        const URI = `/api/v1/user/${document.getElementById("user_id").value}/history?${new URLSearchParams({start})}`;
         console.log('GET',URI)
         const t = await fetch(URI);
         const u = await t.json();

@@ -171,7 +171,7 @@ router.post('/book/:id/rent',async (req, res) => {
     res.status(409).json({
       'errorMessage': '貸出中'
     });
-    
+
     return;
   }
   //本・ユーザが存在、現在貸し出し可能である
@@ -222,7 +222,7 @@ router.post('/book/:id/return',async (req, res) => {
 });
 
 // 貸し出し履歴
-router.get('/rent_ret/:user_id', (req, res) => {
+router.get('/user/:user_id/history', (req, res) => {
   // これ降順のほうが嬉しいな
   const rent_relations = TEST_BOOKS_DATABASE.rent_ret_history.filter(x => x.user_id === TEST_USER.id).reverse();
   const start = parseInt(req.query.start) || 0;
