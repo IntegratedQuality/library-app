@@ -201,10 +201,10 @@ router.post('/book/:id/return',async (req, res) => {
 
     return;
   }
-  // 貸し出し関係を取得
-  const rent_relation = TEST_BOOKS_DATABASE.rent_ret_history.find(x => x.return_time===null && x.user_id === TEST_USER.id);
+  // 貸し出し履歴を取得
+  const rent_history = TEST_BOOKS_DATABASE.rent_ret_history.find(x => x.return_time===null && x.user_id === TEST_USER.id);
 
-  if(!targetBook.is_rented || !rent_relation){
+  if(!targetBook.is_rented || !rent_history){
     res.status(409).json({
       'errorMessage': 'あなたに貸出していない'
     });
@@ -217,7 +217,7 @@ router.post('/book/:id/return',async (req, res) => {
   targetBook.is_rented=false;
   
   //返却の記録
-  rent_relation.return_time = new Date();
+  rent_history.return_time = new Date();
   res.sendStatus(204);
 });
 
