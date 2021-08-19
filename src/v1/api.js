@@ -92,13 +92,13 @@ router.get('/books',(req, res) => {
   const start = parseInt(req.query.start) || 0;
   res.json({
     total:TEST_BOOKS_DATABASE.books.length,
+    perpage: RETCNT,
     list:TEST_BOOKS_DATABASE.books.slice(start, start+RETCNT)
   });
 });
 
 // 本の追加
 router.put('/books',(req, res) => {
-  console.log(req.body);
   const title = req.body.title;
   const isbn = req.body.isbn;
   if(!ISBN.isJustifiable(isbn)){
@@ -119,7 +119,7 @@ router.put('/books',(req, res) => {
 
   //新たな本の追加
   const newbook = {
-    id: TEST_BOOKS_DATABASE.books.length,
+    id: TEST_BOOKS_DATABASE.books.length + 1,//1-index
     title, 
     isbn,
     is_rented: false
@@ -135,6 +135,7 @@ router.get('/books/search',(req, res)=>{
   const start = parseInt(req.query.start) || 0;
   res.json({
     total: hit.length,
+    perpage: RETCNT,
     list:hit.slice(start, start+RETCNT)
   });
 });
@@ -170,6 +171,8 @@ router.post('/book/:id/rent',async (req, res) => {
     res.status(409).json({
       'errorMessage': '貸出中'
     });
+    
+    return;
   }
   //本・ユーザが存在、現在貸し出し可能である
 
@@ -225,6 +228,7 @@ router.get('/rent_ret/:user_id', (req, res) => {
   const start = parseInt(req.query.start) || 0;
   res.json({
     total: rent_relations.length,
+    perpage: RETCNT,
     list:rent_relations.slice(start, start+RETCNT)
   });
 });

@@ -65,16 +65,19 @@ const incorrectISBN = [
   '494760222X',
 ];
 
+describe('ISBNユーティリティ関連のテスト',()=>{
 
-test('不変モジュール', () => {
-  expect(()=>{
-    ISBN.notExistProperty = 10;
-  }).toThrow();
-});
-
-test.each(correctISBN)('ISBN検証 %s', (a) => {
-  expect(ISBN.isJustifiable(a)).toBeTruthy(); 
-});
-test.each(incorrectISBN)('ISBN検証 %s', (a) => {
-  expect(ISBN.isJustifiable(a)).toBeFalsy(); 
+  test('不変モジュール', () => {
+    expect(()=>{
+      ISBN.notExistProperty = 10;
+    }).toThrow();
+  });
+  
+  test.each(correctISBN)('ISBN検証 %s', (a) => {
+    expect(ISBN.isJustifiable(a)).toBeTruthy(); 
+  });
+  test.each(incorrectISBN)('ISBN検証 %s', (a) => {
+    expect(ISBN.isJustifiable(a)).toBeFalsy(); 
+  });
+  
 });

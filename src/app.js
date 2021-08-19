@@ -15,3 +15,5 @@ app.use(express.static('public'));
 app.listen(PORT,()=>{
   console.log(`listen http://localhost:${PORT}`);
 });
+
+module.exports = app;
