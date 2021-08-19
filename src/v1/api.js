@@ -87,8 +87,6 @@ async function findBooks(id){
   return TEST_BOOKS_DATABASE.books.find(x => x.id == id);
 }
 
-console.log(TEST_BOOKS_DATABASE.books.map(x => ISBN.isJustifiable(x.isbn)).reduce((a,c)=>(c ? {t:a.t+1,f:a.f}: {t:a.t,f:a.f+1}),{t:0, f:0}));
-
 // 本の一覧の取得
 router.get('/books',(req, res) => {
   const start = parseInt(req.query.start) || 0;

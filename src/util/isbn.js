@@ -17,8 +17,9 @@ ISBN.isJustifiable = (isbn)=>{
   }else if(isbn.length === 10){
     // モジュラス11・ウェイト10-2
     const sum = isbn.slice(0,9).split('').reduce((a,c,i) => a+parseInt(c)*(10-i),0);
+    const calc = (11 - sum%11)%11;
 
-    return ((11 - sum%11)%11 === parseInt(isbn[9]));
+    return (calc === 10 && isbn[9]==='X') || (calc === parseInt(isbn[9]));
   }else{
     return false;
   }
