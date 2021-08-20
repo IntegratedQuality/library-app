@@ -221,10 +221,25 @@ router.post('/book/:id/return',async (req, res) => {
   res.sendStatus(204);
 });
 
-// 貸し出し履歴
+// 本の貸し出し履歴
+router.get('/book/:id/history', (req, res) => {
+  // これ降順のほうが嬉しいな
+  const book_id = parseInt(req.params.id);
+  const rent_relations = TEST_BOOKS_DATABASE.rent_ret_history.filter(x => x.book_id === book_id).reverse();
+  const start = parseInt(req.query.start) || 0;
+  res.json({
+    total: rent_relations.length,
+    perpage: RETCNT,
+    list:rent_relations.slice(start, start+RETCNT)
+  });
+});
+
+
+// ユーザの貸し出し履歴
 router.get('/user/:user_id/history', (req, res) => {
   // これ降順のほうが嬉しいな
-  const rent_relations = TEST_BOOKS_DATABASE.rent_ret_history.filter(x => x.user_id === TEST_USER.id).reverse();
+  const user_id = parseInt(req.params.user_id);
+  const rent_relations = TEST_BOOKS_DATABASE.rent_ret_history.filter(x => x.user_id === user_id).reverse();
   const start = parseInt(req.query.start) || 0;
   res.json({
     total: rent_relations.length,

@@ -73,24 +73,27 @@
     <article>
       <h2>貸し借り</h2>
       ユーザはTESTUSER1になっています
-      <form>
+      <form id="bookform">
         <label for="id">本番号</label><input type="number" name="id" id="book_id" value='1'>
+        <label for="start">開始位置</label><input type="number" name="start">
       </form>
       <button id="getbook">本の情報の取得</button>
       <button id="rent">本の貸し出し</button>
       <button id="return">本の返却</button>
+      <button id="book_history">本の貸し出し履歴</button>
       </form>
       <br>
       <textarea id="kashioutput" rows="10" cols="40" readonly></textarea>
     </article>
     <script>
+      const bookform =  document.getElementById('bookform');
       document.getElementById('getbook').addEventListener('click', async ()=>{
-        const t = await fetch(`/api/v1/book/${document.getElementById("book_id").value}`);
+        const t = await fetch(`/api/v1/book/${bookform.id.value}`);
         const u = await t.json();
         document.getElementById('kashioutput').value=JSON.stringify(u);
       },false);
       document.getElementById('rent').addEventListener('click', async ()=>{
-        const URI = `/api/v1/book/${document.getElementById("book_id").value}/rent`;
+        const URI = `/api/v1/book/${bookform.id.value}/rent`;
         console.log('POST',URI);
         const t = await fetch(URI,{method:"POST"});
         if(t.status===204){
@@ -101,13 +104,21 @@
         document.getElementById('kashioutput').value=JSON.stringify(u);
       },false);
       document.getElementById('return').addEventListener('click', async ()=>{
-        const URI = `/api/v1/book/${document.getElementById("book_id").value}/return`;
+        const URI = `/api/v1/book/${bookform.id.value}/return`;
         console.log('POST', URI);
         const t = await fetch(URI,{method:"POST"});
         if(t.status===204){
           document.getElementById('kashioutput').value=`Status ${t.status}`;
           return;
         }
+        const u = await t.json();
+        document.getElementById('kashioutput').value=JSON.stringify(u);
+      },false);
+      document.getElementById('book_history').addEventListener('click', async ()=>{
+          const start = bookform.start.value;
+        const URI = `/api/v1/book/${bookform.id.value}/history?${new URLSearchParams({start})}`;
+        console.log('GET',URI)
+        const t = await fetch(URI);
         const u = await t.json();
         document.getElementById('kashioutput').value=JSON.stringify(u);
       },false);

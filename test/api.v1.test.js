@@ -4,6 +4,11 @@ const app = require('../src/app');
 //Util
 const getNumberOfBooks = async (x) => (await request(app).get('/api/v1/books')).body.total;
 
+beforeEach(async ()=> await request(app)
+      .post('/api/v1/book/1/return')
+      .send()
+);
+
 
 describe('本の取得テスト', ()=>{
   test('本の一覧が取得できる', async ()=>{
@@ -141,6 +146,28 @@ describe('本の貸し出しテスト', ()=>{
   });
 
 });
+
+describe('本の貸し出し状況取得', ()=>{
+  test('本の貸し出し状況を取得できる',async ()=>{
+    //確認
+    const res_getbookhistory = await request(app).get('/api/v1/book/1/history');
+    const total = res_getbookhistory.body.total;
+    const res_getuserhistory = await request(app).get('/api/v1/user/1/history');
+    const user_total = res_getuserhistory.body.total;
+    //貸し出し
+    await request(app)
+      .post('/api/v1/book/1/rent')
+      .send();
+    //確認
+    const res_getbookhistory2 = await request(app).get('/api/v1/book/1/history');
+    const total2 = res_getbookhistory2.body.total;
+    expect(total2).toBe(total+1);
+    const res_getuserhistory2 = await request(app).get('/api/v1/user/1/history');
+    const user_total2 = res_getuserhistory2.body.total;
+    expect(user_total2).toBe(user_total+1);
+  });
+});
+
 /**[TODO] ユーザアクセス権等
  * ログイン周辺に目処が立ってからテストを付け足す
  */
