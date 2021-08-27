@@ -1,0 +1,1 @@
+DROP DATABASE IF EXISTS lib_db_test;
