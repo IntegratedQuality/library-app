@@ -6,8 +6,8 @@
   "scripts": {
     "test": "docker exec -it $(docker ps -f name=lib_app_container -q) npm run _test",
     "_test": "jest",
-    "lint": "npx eslint frontend/**/*.js backend/**/*.js",
-    "start": "node backend/app.js"
+    "lint": "npx eslint src/frontend/**/*.js backend/**/*.js",
+    "start": "node src/backend/app.js"
   },
   "repository": {
     "type": "git",
@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "eslint-plugin-import": "^2.24.0",
-    "jest": "^27.0.6"
+    "jest": "^27.0.6",
+    "supertest": "^6.1.6"
   }
 }
