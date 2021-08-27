@@ -10,7 +10,7 @@ const {
   addBook,
   addUser,
   addRentRetHistory,
-} = require('../backend/db');
+} = require('../src/backend/db');
 
 let connection;
 

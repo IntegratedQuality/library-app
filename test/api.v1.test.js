@@ -1,12 +1,12 @@
 const request = require('supertest');
-const app = require('../src/app');
+const app = require('../src/backend/app');
 
 //Util
 const getNumberOfBooks = async (x) => (await request(app).get('/api/v1/books')).body.total;
 
 beforeEach(async ()=> await request(app)
-      .post('/api/v1/book/1/return')
-      .send()
+  .post('/api/v1/book/1/return')
+  .send()
 );
 
 

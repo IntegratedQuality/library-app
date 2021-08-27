@@ -6,8 +6,8 @@
   "scripts": {
     "test": "docker exec -it $(docker ps -f name=lib_app_container -q) npm run _test",
     "_test": "jest",
-    "lint": "npx eslint src/frontend/**/*.js backend/**/*.js",
-    "start": "node src/backend/app.js"
+    "lint": "npx eslint src/frontend/**/*.js src/backend/**/*.js",
+    "start": "docker exec -it $(docker ps -f name=lib_app_container -q) node src/backend/app.js"
   },
   "repository": {
     "type": "git",

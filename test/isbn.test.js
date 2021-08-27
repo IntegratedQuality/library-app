@@ -1,6 +1,6 @@
 'use strict';
 
-const ISBN = require('../src/util/isbn');
+const ISBN = require('../src/backend/util/isbn');
 
 const correctISBN =[
   '9784088807232',
@@ -72,12 +72,12 @@ describe('ISBNユーティリティ関連のテスト',()=>{
       ISBN.notExistProperty = 10;
     }).toThrow();
   });
-  
+
   test.each(correctISBN)('ISBN検証 %s', (a) => {
-    expect(ISBN.isJustifiable(a)).toBeTruthy(); 
+    expect(ISBN.isJustifiable(a)).toBeTruthy();
   });
   test.each(incorrectISBN)('ISBN検証 %s', (a) => {
-    expect(ISBN.isJustifiable(a)).toBeFalsy(); 
+    expect(ISBN.isJustifiable(a)).toBeFalsy();
   });
-  
+
 });
