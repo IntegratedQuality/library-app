@@ -4,12 +4,12 @@
 
 ## 実行
 ```
+npm install
 docker-compose up -b
-```
-を実行した後に
-```
 npm start
 ```
+npm install はパッケージを更新していなければしなくて大丈夫です
+
 ## push する前に
 src に移動してから(cd src)
 ```
