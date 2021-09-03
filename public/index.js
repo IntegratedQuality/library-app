@@ -1,3 +1,4 @@
+// TODO: books.jsとほとんど同じなので、うまくやる
 // 蔵書一覧を取得する
 document.addEventListener('onload', async (e) => {
     e.preventDefault();
@@ -19,6 +20,7 @@ for (pageLink of document.getElementsByClassName('page-link')) {
     }
 
     pageLink.addEventListener('click', async (e) => {
+        e.preventDefault();
         // const URI = `/api/v1/books?${new URLSearchParams({ offset })}`;
         // console.log("GET", URI);
         // const t = await fetch(URI);
