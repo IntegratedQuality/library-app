@@ -10,14 +10,14 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     console.log(u);
 
 
-    document.getElementById('input-isbn').setAttribute('value', `${u.isbn}`)
-    document.getElementById('input-title').setAttribute('value', `${u.title}`)
+    document.getElementById('input-isbn').setAttribute('value', u.isbn)
+    document.getElementById('input-title').setAttribute('value', u.title)
 }, false);
 
 document.getElementById('update-button').addEventListener('click', async (e) => {
-
+    // TODO: 更新処理の実装
 });
 
 document.getElementById('delete-button').addEventListener('click', async (e) => {
-    
+    // TODO: 削除処理の実装
 });
