@@ -34,7 +34,7 @@ window.addEventListener('load', async (e) => {
     } else {
         let booksHTML = '';
         for (bookData of u.list) {
-            booksHTML += `<li class="list-group-item py-4 px-1"><div class="row"><a href="/book_details.html?id=${bookData.id}" class="text-decoration-none lead pb-2">${bookData.title}</a></div></li>`;
+            booksHTML += `<li class="list-group-item py-4 px-1"><div class="row"><a href="/book.html?id=${bookData.id}" class="text-decoration-none lead pb-2">${bookData.title}</a></div></li>`;
         }
         document.getElementById('book-list-area').innerHTML = booksHTML;
     }
