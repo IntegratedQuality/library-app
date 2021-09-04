@@ -18,7 +18,7 @@ window.addEventListener('load', async (e) => {
     if (q === null || q === undefined || q === '') {
         return false;
     }
-    
+
     document.getElementById('search-input').setAttribute('value', q);
 
     // 書籍データの取得
