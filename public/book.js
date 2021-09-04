@@ -25,15 +25,6 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     }
     target.innerHTML = html;
 
-}, false);
+    document.getElementById('edit-button').setAttribute('href', `/edit.html?id=${u.id}`)
 
-
-document.getElementById('rent-button').addEventListener('click', (e) => {
-    e.preventDefault();
-
-}, false);
-
-document.getElementById('rent-button').addEventListener('click', (e) => {
-    e.preventDefault();
-    
 }, false);
