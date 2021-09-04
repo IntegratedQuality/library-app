@@ -39,71 +39,16 @@
       </aside>
       <article class="col-8">
         <p class="display-5 pb-3">検索</p>
-        <form id="search" action="/api/v1/books" method="get">
+        <form id="search-form" action="/books.html" method="get">
           <div class="input-group pb-4">
-            <input name="q" type="search" class="form-control" placeholder="蔵書から検索">
+            <input id="search-input" name="q" type="search" class="form-control" placeholder="蔵書から検索">
             <button type="submit" class="btn btn-primary">検索</button>
           </div>
         </form>
-        <nav aria-label="Page navigation example">
-          <ul class="pagination">
-            <li class="page-item">
-              <a class="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-              <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-          </ul>
+        <nav class="page-area"></nav>
         </nav>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item py-4 px-1">
-            <div class="row">
-              <!-- <div style="font-size: 0.8rem;">1</div> -->
-              <a href="#" class="text-decoration-none lead pb-2">本のタイトル</a>
-              <small class=>貸出：可</small>
-            </div>
-          </li>
-          <li class="list-group-item py-4 px-1">
-            <div class="row">
-              <!-- <div style="font-size: 0.8rem;">1</div> -->
-              <a href="#" class="text-decoration-none lead pb-2">Routledge handbook of Japanese cinema / edited by
-                Joanne Bernardi and Shota T. Ogawa</a>
-              <small>貸出：否</small>
-            </div>
-          </li>
-          <li class="list-group-item py-4 px-1">
-            <div class="row">
-              <!-- <div style="font-size: 0.8rem;">1</div> -->
-              <a href="#" class="text-decoration-none lead pb-2">The politics and ethics of the just price :
-                ethnographies of market exchange / edited by Peter Luetchford, Giovanni Orlando</a>
-              <small>貸出：否</small>
-            </div>
-          </li>
-        </ul>
-        <nav aria-label="Page navigation example">
-          <ul class="pagination">
-            <li class="page-item">
-              <a class="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-              <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
+        <ul id="book-list-area" class="list-group list-group-flush"></ul>
+        <nav class="page-area"></nav>
       </article>
     </div>
   </div>
@@ -114,6 +59,7 @@
     integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
     crossorigin="anonymous"></script>
   <script src="/public/books.js"></script>
+  <script src="/books.js"></script>
 </body>
 
 </html>
