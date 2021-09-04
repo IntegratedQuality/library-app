@@ -1,4 +1,5 @@
-window.addEventListener('load', async (e) => {
+// TODO: もっさりをなおす
+document.addEventListener('DOMContentLoaded', async (e) => {
 
     const params = new URLSearchParams(document.location.search.substring(1));
     const URI = `/api/v1/book/${params.get('id')}`;

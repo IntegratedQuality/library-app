@@ -3,7 +3,7 @@
  * - [ ] 個別ページへのリンクを張る
  */
 // 蔵書一覧の読み込み
-window.addEventListener('load', async (e) => {
+document.addEventListener('DOMContentLoaded', async (e) => {
 
     const params = new URLSearchParams(document.location.search.substring(1));
     let pageNum = parseInt(params.get('page'));

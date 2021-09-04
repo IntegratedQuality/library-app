@@ -3,7 +3,7 @@
  * - [ ] 個別ページへのリンクを張る
  */
 
-window.addEventListener('load', async (e) => {
+ document.addEventListener('DOMContentLoaded', async (e) => {
 
     // クエリ文字列の解析
     const params = new URLSearchParams(document.location.search.substring(1));
