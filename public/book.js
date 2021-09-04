@@ -28,3 +28,21 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     document.getElementById('edit-button').setAttribute('href', `/edit.html?id=${u.id}`)
 
 }, false);
+
+
+document.getElementById('rent-button').addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    const params = new URLSearchParams(document.location.search.substring(1));
+    const URI = `/api/v1/book/${params.get('id')}/rent`;
+    console.log('POST', URI);
+    const t = await fetch(URI, { method: "POST" });
+    if (t.status === 204) {
+        console.log(`Status ${t.status}`);
+        // ページの表示を更新する
+        location.reload();
+    }
+
+    const u = await t.json();
+    console.log(JSON.stringify(u));
+}, false);
