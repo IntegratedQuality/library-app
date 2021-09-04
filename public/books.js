@@ -18,9 +18,8 @@ window.addEventListener('load', async (e) => {
     if (q === null || q === undefined || q === '') {
         return false;
     }
+    
     document.getElementById('search-input').setAttribute('value', q);
-    console.log('q=', q)
-    console.log(q)
 
     // 書籍データの取得
     const URI = `/api/v1/books/search?${new URLSearchParams({ q, start })}`;

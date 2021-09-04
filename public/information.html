@@ -20,35 +20,22 @@
     <div class="row">
       <aside class="sidebar col-3">
         <div class="list-group">
-          <a href="/" class="list-group-item list-group-item-action">
-            トップページ
-          </a>
-          <a href="/rent.html" class="list-group-item list-group-item-action">
+          <a href="/" class="list-group-item list-group-item-action">トップページ</a>
+          <a href="/rent" class="list-group-item list-group-item-action">
             このサイトについて
           </a>
-          <a href="/return.html" class="list-group-item list-group-item-action">
+          <a href="/return" class="list-group-item list-group-item-action">
             本を返す
           </a>
-          <a href="/books.html" class="list-group-item list-group-item-action active">
+          <a href="/rent" class="list-group-item list-group-item-action">
             本を探す
           </a>
-          <a href="/register.html" class="list-group-item list-group-item-action">
+          <a href="/register" class="list-group-item list-group-item-action active">
             本を登録する
           </a>
         </div>
       </aside>
       <article class="col-8">
-        <p class="display-5 pb-3">検索</p>
-        <form id="search-form" action="/books.html" method="get">
-          <div class="input-group pb-4">
-            <input id="search-input" name="q" type="search" class="form-control" placeholder="蔵書から検索">
-            <button type="submit" class="btn btn-primary">検索</button>
-          </div>
-        </form>
-        <nav class="page-area"></nav>
-        </nav>
-        <ul id="book-list-area" class="list-group list-group-flush"></ul>
-        <nav class="page-area"></nav>
       </article>
     </div>
   </div>
@@ -58,8 +45,6 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
     crossorigin="anonymous"></script>
-  <script src="/public/books.js"></script>
-  <script src="/books.js"></script>
 </body>
 
 </html>
