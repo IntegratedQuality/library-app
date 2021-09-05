@@ -8,7 +8,7 @@
   <title>IQ-OPAC</title>
 </head>
 
-<body style="overflow-y: scroll;">
+<body>
   <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(48, 23, 158);">
     <div class="container-fluid">
       <a href="/" class="navbar-brand h1 mb-0 fs-2 text-white">IQ-OPAC</a>
@@ -22,7 +22,7 @@
       </div>
     </div>
   </nav>
-  <div class="container-fluid mt-5 pb-5">
+  <div class="container-fluid mt-5">
     <div class="row">
       <aside class="sidebar col-3">
         <div class="list-group">
@@ -42,19 +42,32 @@
         </div>
       </aside>
       <article class="col-8">
-        <p class="display-5 pb-4">蔵書一覧</p>
-        <div id="number-area" class="row mb-2"></div>
-        <nav class="page-area"></nav>
-        <ul id="book-list-area" class="list-group list-group-flush"></ul>
-        <nav class="page-area"></nav>
+        <p class="display-5 pb-3">登録情報の修正</p>
+        <form action="/register" method="post">
+          <div class="input-group pb-3">
+            <!-- ISBN -->
+            <span class="input-group-text">ISBN</span>
+            <input id="input-isbn" name="isbn" type="text" class="form-control" placeholder="ISBNを入力">
+          </div>
+          <div class="input-group pb-3">
+            <!-- title -->
+            <span class="input-group-text">Title</span>
+            <input id="input-title" type="text" class="form-control" placeholder="本のタイトルを入力">
+          </div>
+        </form>
+        <div class="d-flex justify-content-between">
+
+          <button id="delete-button" class="btn btn-danger">本を削除</button>
+          <button id="update-button" class="btn btn-primary">更新</button>
+        </div>
       </article>
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
     crossorigin="anonymous"></script>
-  <script src="/index.js"></script>
-  <script src="/public/index.js"></script>
+  <script src="/edit.js"></script>
+  <script src="/public/edit.js"></script>
 </body>
 
 </html>
