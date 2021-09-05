@@ -27,6 +27,9 @@
     const t = await fetch(URI);
     const u = await t.json();
 
+    // 件数表示を描画
+    document.getElementById('number-area').innerHTML = `<p><span class="fw-bold"> ${ start + 1 } </span> ～ <span class="fw-bold"> ${ start + perPage } </span>件目／<span class="fw-bold"> ${u.total} </span>件中</p>`;
+
     // 書籍リストを描画
     if (u.total === 0) {
         document.getElementById('book-list-area').innerHTML += `<p class="lead pt-4 ps-3">該当する書籍がありません</p>`

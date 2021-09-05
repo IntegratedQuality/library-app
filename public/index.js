@@ -8,11 +8,12 @@
  * - [x] 本のレンタル処理
  * - [x] 本の登録処理
  * - [x] 本の返却処理
- * - [ ] 本リスト読み込み時に目に悪そうな動きをするのを直す
+ * - [x] 本リスト読み込み時に目に悪そうな動きをするのを直す
  * - [ ] 検索結果に件数を表示する
- * - [ ] レスポンシブにする（特に表やリスト状のもの）
  * - [ ] 自分が借りているか、他人が借りているか判定
  * - [ ] えらーハンドリングをちゃんとやる
+ * - [ ] レスポンシブにする（特に表やリスト状のもの）
+ * - [ ] 配信ファイルのディレクトリ構成（サーバ側、クライアント側共に）
  * 
  * そのうちTODOになる
  * - [ ] ログイン処理
@@ -23,7 +24,7 @@
  * 
  * HAD BETTER TODO
  * - [x] footer消す
- * - [ ] 登録修正のボタン配置をよくする
+ * - [ ] 登録修正のボタン配置をいい感じにする
  * - [ ] デザインをかっこよくする
  * - [ ] Reactに置き換える
  * - [ ] フォルダ構造の変更
@@ -46,7 +47,10 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     const t = await fetch(URI);
     const u = await t.json();
     console.log(u);
-{/* <div class="row"><a href="/book.html?id=${bookData.id}" class="text-decoration-none lead pb-2">${bookData.title}</a></div> */}
+
+    // 件数表示を描画
+    document.getElementById('number-area').innerHTML = `<p><span class="fw-bold"> ${ start + 1 } </span> ～ <span class="fw-bold"> ${ start + perPage } </span>件目／<span class="fw-bold"> ${u.total} </span>件中</p>`;
+
     // 書籍リストを描画
     let booksHTML = '';
     for (bookData of u.list) {
