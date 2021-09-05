@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async (e) => {
         return null;
     });
     console.log(u);
-    
+
     // 貸出状態に基づいて描画する
     if (u === null) {
         // 取得に失敗した！
@@ -98,7 +98,7 @@ document.getElementById('return-button').addEventListener('click', async (e) => 
             failedBookList.push(bookID);
             continue;
         }
-        const u = await t.json().catch(error => {console.error(error);});
+        const u = await t.json().catch(error => { console.error(error); });
         console.log(JSON.stringify(u));
     }
     if (failedBookList.length > 0) {

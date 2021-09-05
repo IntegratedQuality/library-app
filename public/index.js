@@ -43,15 +43,15 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     // 書籍データの取得
     const URI = `/api/v1/books?${new URLSearchParams({ start })}`;
     console.log("GET", URI);
-    const t = await fetch(URI).catch(error => {console.error(error); });
+    const t = await fetch(URI).catch(error => { console.error(error); });
     const u = await t.json().catch(error => {
         console.error(error);
-        return {total: 0, error: error};
+        return { total: 0, error: error };
     });
     console.log(u);
 
     // 件数表示を描画
-    document.getElementById('number-area').innerHTML = `<p><span class="fw-bold"> ${ Math.min(u.total, start + 1) } </span> ～ <span class="fw-bold"> ${ Math.min(u.total, start + perPage) } </span>件目／<span class="fw-bold"> ${u.total} </span>件中</p>`;
+    document.getElementById('number-area').innerHTML = `<p><span class="fw-bold"> ${Math.min(u.total, start + 1)} </span> ～ <span class="fw-bold"> ${Math.min(u.total, start + perPage)} </span>件目／<span class="fw-bold"> ${u.total} </span>件中</p>`;
 
     // 書籍リストを描画
     if (u.error !== undefined) {

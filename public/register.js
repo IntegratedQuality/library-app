@@ -13,14 +13,14 @@ registerBook.addEventListener('submit', async (e) => {
     console.log("isbn:", isbn);
 
     const URI = `/api/v1/books`;
-    console.log("PUT",URI,{title,isbn});
+    console.log("PUT", URI, { title, isbn });
 
-    const t = await fetch(URI,{method: 'PUT',headers: {'Content-Type': 'application/json'},body:JSON.stringify({title,isbn})});
+    const t = await fetch(URI, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title, isbn }) });
 
     if (t.status >= 400) {
         alert('本の登録に失敗しました');
     }
 
-    const u = await t.json().catch(error => {console.error(error);});
+    const u = await t.json().catch(error => { console.error(error); });
     console.log(JSON.stringify(u));
 }, false);

@@ -3,7 +3,7 @@
  * - [ ] 個別ページへのリンクを張る
  */
 
- document.addEventListener('DOMContentLoaded', async (e) => {
+document.addEventListener('DOMContentLoaded', async (e) => {
 
     // クエリ文字列の解析
     const params = new URLSearchParams(document.location.search.substring(1));
@@ -27,12 +27,12 @@
     const t = await fetch(URI).catch((error) => { console.err(error) });;
     const u = await t.json().catch((error) => {
         console.error(error);
-        return {total: 0, error : error};
+        return { total: 0, error: error };
     });
     console.log(u);
 
     // 件数表示を描画
-    document.getElementById('number-area').innerHTML = `<p><span class="fw-bold"> ${ Math.min(u.total, start + 1) } </span> ～ <span class="fw-bold"> ${ Math.min(u.total, start + perPage) } </span>件目／<span class="fw-bold"> ${u.total} </span>件中</p>`;
+    document.getElementById('number-area').innerHTML = `<p><span class="fw-bold"> ${Math.min(u.total, start + 1)} </span> ～ <span class="fw-bold"> ${Math.min(u.total, start + perPage)} </span>件目／<span class="fw-bold"> ${u.total} </span>件中</p>`;
 
     // 書籍リストを描画
     if (u.error !== undefined) {
@@ -67,6 +67,6 @@
         pageHTML += `<li class="page-item"><a class="page-link" href="http://localhost:3000/books.html?q=${q}&page=${Math.min(maxPage, pageNum + 1)}"><span aria-hidden="true">&raquo;</span></a></li>`
         pageArea.innerHTML = pageHTML;
     }
-    
+
 }, false);
 
