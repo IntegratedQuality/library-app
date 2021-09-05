@@ -4,16 +4,13 @@
  * - [x] navbarの修正
  * - [x] ログイン画面
  * - [x] ユーザ登録画面
- * - [ ] ユーザ情報画面
  * - [x] 本のレンタル処理
  * - [x] 本の登録処理
  * - [x] 本の返却処理
  * - [x] 本リスト読み込み時に目に悪そうな動きをするのを直す
- * - [ ] 検索結果に件数を表示する
- * - [ ] 自分が借りているか、他人が借りているか判定
+ * - [x] 検索結果に件数を表示する
  * - [ ] えらーハンドリングをちゃんとやる
  * - [ ] レスポンシブにする（特に表やリスト状のもの）
- * - [ ] 配信ファイルのディレクトリ構成（サーバ側、クライアント側共に）
  * 
  * そのうちTODOになる
  * - [ ] ログイン処理
@@ -21,13 +18,15 @@
  * - [ ] ユーザ情報更新処理
  * - [ ] 本の登録情報更新処理
  * - [ ] 本の登録削除しょり
+ * - [ ] ユーザ情報画面 <= ログイン状態でSIGNIN/LOGINの代わりにリンクが表示されるようにする
  * 
  * HAD BETTER TODO
  * - [x] footer消す
  * - [ ] 登録修正のボタン配置をいい感じにする
+ * - [ ] 自分が借りているか、他人が借りているか判定
  * - [ ] デザインをかっこよくする
  * - [ ] Reactに置き換える
- * - [ ] フォルダ構造の変更
+ * - [ ] 配信ファイルのディレクトリ構成（サーバ側、クライアント側共に）
  */
 // 蔵書一覧の読み込み
 document.addEventListener('DOMContentLoaded', async (e) => {
@@ -49,7 +48,7 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     console.log(u);
 
     // 件数表示を描画
-    document.getElementById('number-area').innerHTML = `<p><span class="fw-bold"> ${ start + 1 } </span> ～ <span class="fw-bold"> ${ start + perPage } </span>件目／<span class="fw-bold"> ${u.total} </span>件中</p>`;
+    document.getElementById('number-area').innerHTML = `<p><span class="fw-bold"> ${ start + 1 } </span> ～ <span class="fw-bold"> ${ Math.min(u.total, start + perPage) } </span>件目／<span class="fw-bold"> ${u.total} </span>件中</p>`;
 
     // 書籍リストを描画
     let booksHTML = '';

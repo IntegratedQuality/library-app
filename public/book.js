@@ -1,4 +1,4 @@
-// TODO: もっさりをなおす
+
 document.addEventListener('DOMContentLoaded', async (e) => {
 
     const params = new URLSearchParams(document.location.search.substring(1));
@@ -18,10 +18,10 @@ document.addEventListener('DOMContentLoaded', async (e) => {
                 <dd class="col-10">${u.isbn}</dd>
             </dl>`;
     if (u.is_rented) {
-        html += `<p>現在貸し出し中です</p>`;
+        html += `<p>現在貸し出し<span class="fw-bold"> 不可 </span>です</p>`;
         document.getElementById('rent-button').setAttribute('class', 'btn btn-primary disabled')
     } else {
-        html += `<p>現在貸し出し可能です</p>`;
+        html += `<p>現在貸し出し<span class="fw-bold"> 可 </span>です</p>`;
     }
     target.innerHTML = html;
 

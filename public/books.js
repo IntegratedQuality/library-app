@@ -28,7 +28,7 @@
     const u = await t.json();
 
     // 件数表示を描画
-    document.getElementById('number-area').innerHTML = `<p><span class="fw-bold"> ${ start + 1 } </span> ～ <span class="fw-bold"> ${ start + perPage } </span>件目／<span class="fw-bold"> ${u.total} </span>件中</p>`;
+    document.getElementById('number-area').innerHTML = `<p><span class="fw-bold"> ${ start + 1 } </span> ～ <span class="fw-bold"> ${ Math.min(u.total, start + perPage) } </span>件目／<span class="fw-bold"> ${u.total} </span>件中</p>`;
 
     // 書籍リストを描画
     if (u.total === 0) {
