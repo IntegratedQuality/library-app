@@ -23,6 +23,8 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     let html = `<p class="">貸出中の資料：<span class="fw-bold">${unreturedBooks.length}</span>冊</p>`
 
     if (unreturedBooks.length === 0) {
+        document.getElementById('return-text').setAttribute('class', 'collapse')
+        document.getElementById('return-button').setAttribute('class', 'collapse')
         html += `<p>現在貸し出し中の資料はありません</p>`
         target.innerHTML = html;
         return;
@@ -33,9 +35,9 @@ document.addEventListener('DOMContentLoaded', async (e) => {
                     <tr>
                         <th scope="col"></th>
                         <th scope="col">#</th>
-                        <th scope="col">ISBN</th>
-                        <th scope="col">返却期限</th>
-                        <th scope="col">書名</th>
+                        <th scope="col" class="col-2">ISBN</th>
+                        <th scope="col" class="col-3">返却期限</th>
+                        <th scope="col" class="col-6">書名</th>
                     </tr>
             </thead>`;
     html += '<tbody>';
@@ -52,11 +54,11 @@ document.addEventListener('DOMContentLoaded', async (e) => {
 
         // 書籍データの描画
         html += `<tr>
-                    <th scope="col"><input id="table-row-${i}" class="return-checkbox" type="checkbox"></th>
-                    <th scope="col">${i}</th>
-                    <th scope="col">${u.isbn}</th>
-                    <th scope="col">返却期限はないよ！</th>
-                    <th scope="col"><a href="/book.html?id=${u.id}" class="text-decoration-none">${u.title}</a></th>
+                    <td><input id="table-row-${i}" class="return-checkbox" type="checkbox"></th>
+                    <td>${i}</th>
+                    <td>${u.isbn}</th>
+                    <td>yyyy-mm-dd</th>
+                    <td><a href="/book.html?id=${u.id}" class="text-decoration-none">${u.title}</a></th>
                 </tr>`;
     }
     html += '</tbody>';
