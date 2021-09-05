@@ -21,17 +21,24 @@
 
     document.getElementById('search-input').setAttribute('value', q);
 
-    // 書籍データの取得
+    // 検索結果の取得
     const URI = `/api/v1/books/search?${new URLSearchParams({ q, start })}`;
     console.log("GET", URI);
-    const t = await fetch(URI);
-    const u = await t.json();
+    const t = await fetch(URI).catch((error) => { console.err(error) });;
+    const u = await t.json().catch((error) => {
+        console.error(error);
+        return {total: 0, error : error};
+    });
+    console.log(u);
 
     // 件数表示を描画
-    document.getElementById('number-area').innerHTML = `<p><span class="fw-bold"> ${ start + 1 } </span> ～ <span class="fw-bold"> ${ Math.min(u.total, start + perPage) } </span>件目／<span class="fw-bold"> ${u.total} </span>件中</p>`;
+    document.getElementById('number-area').innerHTML = `<p><span class="fw-bold"> ${ Math.min(u.total, start + 1) } </span> ～ <span class="fw-bold"> ${ Math.min(u.total, start + perPage) } </span>件目／<span class="fw-bold"> ${u.total} </span>件中</p>`;
 
     // 書籍リストを描画
-    if (u.total === 0) {
+    if (u.error !== undefined) {
+        document.getElementById('book-list-area').innerHTML += `<p class="lead pt-4 ps-3">検索結果の取得に失敗しました</p>`
+        return false;
+    } else if (u.total === 0) {
         document.getElementById('book-list-area').innerHTML += `<p class="lead pt-4 ps-3">該当する書籍がありません</p>`
         return false;
     } else {

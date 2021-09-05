@@ -17,6 +17,10 @@ registerBook.addEventListener('submit', async (e) => {
 
     const t = await fetch(URI,{method: 'PUT',headers: {'Content-Type': 'application/json'},body:JSON.stringify({title,isbn})});
 
-    const u = await t.json();
+    if (t.status >= 400) {
+        alert('本の登録に失敗しました');
+    }
+
+    const u = await t.json().catch(error => {console.error(error);});
     console.log(JSON.stringify(u));
 }, false);

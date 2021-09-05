@@ -11,15 +11,27 @@ document.addEventListener('DOMContentLoaded', async (e) => {
 
     console.log('GET', URI)
     const t = await fetch(URI);
-    const u = await t.json();
+    const u = await t.json().catch(error => {
+        console.error(error);
+        return null;
+    });
     console.log(u);
     
     // 貸出状態に基づいて描画する
+    if (u === null) {
+        // 取得に失敗した！
+        document.getElementById('return-text').setAttribute('class', 'collapse')
+        document.getElementById('return-button').setAttribute('class', 'collapse')
+        document.getElementById('rent-list-area').innerHTML = `<p>貸出情報の取得に失敗しました</p>`
+        return;
+    }
+
     const unreturedBooks = u.list.filter(x => x.return_time === null);
     const target = document.getElementById('rent-list-area');
-    let html = `<p class="">貸出中の資料：<span class="fw-bold">${unreturedBooks.length}</span>冊</p>`
+    let html = `<p class="">貸出中の資料：<span class="fw-bold"> ${unreturedBooks.length} </span>冊</p>`
 
     if (unreturedBooks.length === 0) {
+        // 何も借りていない
         document.getElementById('return-text').setAttribute('class', 'collapse')
         document.getElementById('return-button').setAttribute('class', 'collapse')
         html += `<p>現在貸し出し中の資料はありません</p>`
@@ -77,14 +89,20 @@ document.getElementById('return-button').addEventListener('click', async (e) => 
     }
 
     // すべてのIDの本を返却する
+    const failedBookList = [];
     for (let bookID of bookIDList) {
         const URI = `/api/v1/book/${bookID}/return`;
         console.log('POST', URI);
         const t = await fetch(URI, { method: "POST" });
-        if (t.status !== 204) {
-            console.log(`ERROR: HTTP responce status is invalid.\n Expected 204 but ${t.status}.\n Fail to return book (id=${bookID}). Maybe wrong bookID is sent.`);
+        if (t.status >= 400) {
+            failedBookList.push(bookID);
             continue;
         }
+        const u = await t.json().catch(error => {console.error(error);});
+        console.log(JSON.stringify(u));
+    }
+    if (failedBookList.length > 0) {
+        alert(`Fail to return some book. id = ${failedBookList.toString()}`);
     }
 
     // デバッグするときは消そう！

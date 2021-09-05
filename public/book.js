@@ -1,14 +1,26 @@
 
 document.addEventListener('DOMContentLoaded', async (e) => {
 
+    // クエリの解析
     const params = new URLSearchParams(document.location.search.substring(1));
+    // const URI = `/api/v1/book/${params.get('id')}`;
     const URI = `/api/v1/book/${params.get('id')}`;
 
+    // API呼び出し
     console.log("GET", URI);
-    const t = await fetch(URI);
-    const u = await t.json();
+    const t = await fetch(URI).catch((error) => { console.err(error) });
+    const u = await t.json().catch((error) => {
+        console.error(error);
+        document.getElementById('book-card-body').innerHTML = `<p>書誌情報の取得に失敗しました</p>`;
+        return null;
+    });
     console.log(u);
 
+    if (u === null) {
+        return;
+    }
+
+    // 書籍情報の描画
     let target = document.getElementById('book-details-area');
     console.log(target)
     html = `<dl class="row pb-3">
@@ -41,8 +53,8 @@ document.getElementById('rent-button').addEventListener('click', async (e) => {
         console.log(`Status ${t.status}`);
         // ページの表示を更新する
         location.reload();
+    } else {
+        alert('貸出処理に失敗しました')
     }
 
-    const u = await t.json();
-    console.log(JSON.stringify(u));
 }, false);

@@ -10,7 +10,6 @@
  * - [x] 本リスト読み込み時に目に悪そうな動きをするのを直す
  * - [x] 検索結果に件数を表示する
  * - [ ] えらーハンドリングをちゃんとやる
- * - [ ] レスポンシブにする（特に表やリスト状のもの）
  * 
  * そのうちTODOになる
  * - [ ] ログイン処理
@@ -27,6 +26,7 @@
  * - [ ] デザインをかっこよくする
  * - [ ] Reactに置き換える
  * - [ ] 配信ファイルのディレクトリ構成（サーバ側、クライアント側共に）
+ * - [ ] レスポンシブにする（特に表やリスト状のもの）
  */
 // 蔵書一覧の読み込み
 document.addEventListener('DOMContentLoaded', async (e) => {
@@ -43,19 +43,27 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     // 書籍データの取得
     const URI = `/api/v1/books?${new URLSearchParams({ start })}`;
     console.log("GET", URI);
-    const t = await fetch(URI);
-    const u = await t.json();
+    const t = await fetch(URI).catch(error => {console.error(error); });
+    const u = await t.json().catch(error => {
+        console.error(error);
+        return {total: 0, error: error};
+    });
     console.log(u);
 
     // 件数表示を描画
-    document.getElementById('number-area').innerHTML = `<p><span class="fw-bold"> ${ start + 1 } </span> ～ <span class="fw-bold"> ${ Math.min(u.total, start + perPage) } </span>件目／<span class="fw-bold"> ${u.total} </span>件中</p>`;
+    document.getElementById('number-area').innerHTML = `<p><span class="fw-bold"> ${ Math.min(u.total, start + 1) } </span> ～ <span class="fw-bold"> ${ Math.min(u.total, start + perPage) } </span>件目／<span class="fw-bold"> ${u.total} </span>件中</p>`;
 
     // 書籍リストを描画
-    let booksHTML = '';
-    for (bookData of u.list) {
-        booksHTML += `<li class="list-group-item py-4 px-1"><div class="row"><a href="/book.html?id=${bookData.id}" class="text-decoration-none lead pb-2">${bookData.title}</a></div></li>`;
+    if (u.error !== undefined) {
+        document.getElementById('book-list-area').innerHTML += `<p class="lead pt-4 ps-3">検索結果の取得に失敗しました</p>`
+        return false;
+    } else {
+        let booksHTML = '';
+        for (bookData of u.list) {
+            booksHTML += `<li class="list-group-item py-4 px-1"><div class="row"><a href="/book.html?id=${bookData.id}" class="text-decoration-none lead pb-2">${bookData.title}</a></div></li>`;
+        }
+        document.getElementById('book-list-area').innerHTML = booksHTML;
     }
-    document.getElementById('book-list-area').innerHTML = booksHTML;
 
     // paginationを描画
     maxPage = Math.floor(parseInt(u.total) / perPage) + 1;
