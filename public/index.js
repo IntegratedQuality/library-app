@@ -22,9 +22,8 @@
  * - [ ] 本の登録削除しょり
  * 
  * HAD BETTER TODO
- * - [ ] footer 消す
- * - [ ] 登録修正のボタン配置
- * - [ ] 書誌詳細のボタン配置？
+ * - [x] footer消す
+ * - [ ] 登録修正のボタン配置をよくする
  * - [ ] デザインをかっこよくする
  * - [ ] Reactに置き換える
  * - [ ] フォルダ構造の変更
@@ -36,7 +35,7 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     let pageNum = parseInt(params.get('page'));
     if (isNaN(pageNum)) {
         pageNum = 1;
-        console.log("ERROR: fail to parse page number (string -> number). Maybe query string is invalid");
+        console.error("fail to parse page number (string -> number)");
     }
     const perPage = 5;
     const start = (pageNum - 1) * perPage;
@@ -47,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     const t = await fetch(URI);
     const u = await t.json();
     console.log(u);
-
+{/* <div class="row"><a href="/book.html?id=${bookData.id}" class="text-decoration-none lead pb-2">${bookData.title}</a></div> */}
     // 書籍リストを描画
     let booksHTML = '';
     for (bookData of u.list) {
@@ -58,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     // paginationを描画
     maxPage = Math.floor(parseInt(u.total) / perPage) + 1;
     if (isNaN(maxPage)) {
-        console.log("ERROR: fail to parse page number (string -> number)");
+        console.error("fail to parse page number");
     }
 
     for (pageArea of document.getElementsByClassName('page-area')) {
