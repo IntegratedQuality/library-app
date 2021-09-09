@@ -5,8 +5,8 @@ const app = require('../src/app');
 const getNumberOfBooks = async (x) => (await request(app).get('/api/v1/books')).body.total;
 
 beforeEach(async ()=> await request(app)
-      .post('/api/v1/book/1/return')
-      .send()
+  .post('/api/v1/book/1/return')
+  .send()
 );
 
 
@@ -143,6 +143,28 @@ describe('本の貸し出しテスト', ()=>{
       .post('/api/v1/book/1/rent')
       .send();
     expect(res_rent2.status).toBe(409);
+  });
+
+  test('ユーザ貸し出し状況から適切に取得',async ()=>{
+    //貸し出し
+    await request(app)
+      .post('/api/v1/book/1/rent')
+      .send();
+    await request(app)
+      .post('/api/v1/book/2/rent')
+      .send();
+    await request(app)
+      .post('/api/v1/book/3/rent')
+      .send();
+    //返却
+    await request(app)
+      .post('/api/v1/book/2/return')
+      .send();
+    
+    const res_getuserhistory = await request(app).get('/api/v1/user/1/history');
+    const rent_item = res_getuserhistory.body.list.filter((x) => x.return_time === null).map((x)=>x.book_id);
+    expect(rent_item).toEqual(expect.arrayContaining([1,3]));
+    expect(rent_item).not.toEqual(expect.arrayContaining([2]));
   });
 
 });
