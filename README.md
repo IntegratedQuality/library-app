@@ -5,7 +5,7 @@
 ## 実行
 ```
 npm install
-docker-compose up -b
+docker-compose up -d
 npm start
 ```
 npm install はパッケージを更新していなければしなくて大丈夫です
@@ -18,7 +18,7 @@ npm run lint
 をしてソースコードをきれいに保ちましょう
 
 ```
-docker-compose up -b
+docker-compose up -d
 ```
 を実行した後に
 ```
