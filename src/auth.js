@@ -20,7 +20,7 @@ module.exports = (app) => {
   app.use(session({
     secret: SECRET_KEY,
     resave: true,
-    saveUninitialied: true,
+    saveUninitialized: false,
   }));
   
   app.use(passport.initialize());
@@ -32,21 +32,30 @@ module.exports = (app) => {
         // なんかだめ
         // usernameField: 'name',
         // passwordField: 'password',
-        // session: false
+        session: true
       },(err, user, info) => {
         if(err) return  res.status(400).json({message: 'なぜここでエラー？'});
         if(!user) return res.status(400).json({message: 'ログイン失敗'});
- 
-        //success
-        return res.status(200).json({
-          name: user.name,
+        
+        req.logIn(user, (err) => {
+          if(err) {
+            return res.status(400).json({message: 'ログイン失敗'});
+          }
+
+          return res.status(200).json({
+            name: req.user.name,
+          });
         });
+        next();
       })(req, res, next); 
   });
-  app.get('/logout', (req, res) => {
-    if (req.isAuthenticated()) {
-      req.logout();
+  app.post('/logout', (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.sendStatus(401);
     }
-    res.sendStatus(204);
+    req.logOut();
+    req.session.destroy(()=>{
+      res.clearCookie('connect.sid').sendStatus(200);
+    });
   });
 };

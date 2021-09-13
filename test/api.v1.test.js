@@ -106,8 +106,8 @@ describe('本の貸し出しテスト', ()=>{
     initDetabase();
     passportStub.install(app);
     passportStub.login({
-      user_id: 1,
-      user_name: 'c-gengo-kun',
+      id: 1,
+      name: 'c-gengo-kun',
     });
   });
   test('本を貸し借りできる',async ()=>{
@@ -152,8 +152,8 @@ describe('本の貸し出しテスト', ()=>{
     //貸し出し
     await sendPost('/api/v1/book/1/rent');
     passportStub.login({
-      user_id: 2,
-      user_name: 'meijiro-kun',
+      id: 2,
+      name: 'meijiro-kun',
     });
     //貸し出し
     const res_rent2 = await sendPost('/api/v1/book/1/rent');
@@ -164,8 +164,8 @@ describe('本の貸し出しテスト', ()=>{
     //貸し出し
     await sendPost('/api/v1/book/1/rent');
     passportStub.login({
-      user_id: 2,
-      user_name: 'meijiro-kun',
+      id: 2,
+      name: 'meijiro-kun',
     });
     //貸し出し
     const res_rent2 = await sendPost('/api/v1/book/1/return');
@@ -180,8 +180,8 @@ describe('本の貸し出し状況取得', ()=>{
     initDetabase();
     passportStub.install(app);
     passportStub.login({
-      user_id: 1,
-      user_name: 'c-gengo-kun',
+      id: 1,
+      name: 'c-gengo-kun',
     });
   });
   test('本の貸し出し状況を取得できる',async ()=>{

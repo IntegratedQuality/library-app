@@ -6,6 +6,43 @@
   </head>
   <body>
     <article>
+      <h2>ログイン状態</h2>
+      <form action="/api/v1/books" method="post" id="login">
+        <label for="username">ユーザ名</label><input type="text" name="username" placeholder="c-gengo-kun"/>
+        <label for="password">パスワード</label><input type="password" name="password" placeholder="hogefuga">
+        <input type="submit" value="ログイン">
+      </form>
+      <span id="loginstatus">非ログイン</span>
+      <button id="logout">ログアウト</button>
+      <textarea id="loginoutput" rows="10" cols="40" readonly></textarea>
+      <script>
+        const login =  document.getElementById('login');
+        login.addEventListener('submit', async (e)=>{
+          e.preventDefault();
+          const username = login.username.value;
+          const password = login.password.value;
+          const URI = `/login`;
+          console.log("POST",URI,{username,password});
+          const t = await fetch(URI,{method: 'POST', credentials: 'include',headers: {'Content-Type': 'application/json'},body:JSON.stringify({username, password})});
+          const u = await t.json();
+          document.getElementById('loginoutput').value=JSON.stringify(u);
+          if(u.name){
+            document.getElementById('loginstatus').innerText=`${u.name}でログイン中`;
+          }
+        },false);
+        const logout = document.getElementById('logout');
+        logout.addEventListener('click', async (e) => {
+          const URI = `/logout`
+          console.log("POST", URI)
+          const t = await fetch(URI,{method: 'POST', credentials: 'include'});
+          if(t.status===200){
+            document.getElementById('loginstatus').innerText=`非ログイン`;
+            document.getElementById('loginoutput').value="";
+          }
+        });
+      </script>
+    </article>
+    <article>
       <h2>本の追加</h2>
       <form action="/api/v1/books" method="post" id="addbook">
         <label for="title">本のタイトル</label><input type="text" name="title" />
@@ -22,7 +59,7 @@
           const isbn = addbook.isbn.value;
           const URI = `/api/v1/books`;
           console.log("PUT",URI,{title,isbn});
-          const t = await fetch(URI,{method: 'PUT',headers: {'Content-Type': 'application/json'},body:JSON.stringify({title,isbn})});
+          const t = await fetch(URI,{method: 'PUT', credentials: 'include',headers: {'Content-Type': 'application/json'},body:JSON.stringify({title,isbn})});
           const u = await t.json();
           document.getElementById('addbookoutput').value=JSON.stringify(u);
         },false);
@@ -42,7 +79,7 @@
           const start = getform.start.value;
           const URI = `/api/v1/books?${new URLSearchParams({start})}`;
           console.log("GET",URI);
-          const t = await fetch(URI);
+          const t = await fetch(URI, {credentials: 'include'});
           const u = await t.json();
           document.getElementById('getoutput').value=JSON.stringify(u);
         },false);
@@ -64,7 +101,7 @@
           const start = searchform.start.value;
           const URI = `/api/v1/books/search?${new URLSearchParams({q,start})}`;
           console.log("GET",URI);
-          const t = await fetch(URI);
+          const t = await fetch(URI,{credentials: 'include'});
           const u = await t.json();
           document.getElementById('searchoutput').value=JSON.stringify(u);
         },false);
@@ -88,14 +125,14 @@
     <script>
       const bookform =  document.getElementById('bookform');
       document.getElementById('getbook').addEventListener('click', async ()=>{
-        const t = await fetch(`/api/v1/book/${bookform.id.value}`);
+        const t = await fetch(`/api/v1/book/${bookform.id.value}`, {credentials: 'include'});
         const u = await t.json();
         document.getElementById('kashioutput').value=JSON.stringify(u);
       },false);
       document.getElementById('rent').addEventListener('click', async ()=>{
         const URI = `/api/v1/book/${bookform.id.value}/rent`;
         console.log('POST',URI);
-        const t = await fetch(URI,{method:"POST"});
+        const t = await fetch(URI,{method:"POST", credentials: 'include'});
         if(t.status===204){
           document.getElementById('kashioutput').value=`Status ${t.status}`;
           return;
@@ -106,7 +143,7 @@
       document.getElementById('return').addEventListener('click', async ()=>{
         const URI = `/api/v1/book/${bookform.id.value}/return`;
         console.log('POST', URI);
-        const t = await fetch(URI,{method:"POST"});
+        const t = await fetch(URI,{method:"POST", credentials: 'include'});
         if(t.status===204){
           document.getElementById('kashioutput').value=`Status ${t.status}`;
           return;
@@ -118,7 +155,7 @@
           const start = bookform.start.value;
         const URI = `/api/v1/book/${bookform.id.value}/history?${new URLSearchParams({start})}`;
         console.log('GET',URI)
-        const t = await fetch(URI);
+        const t = await fetch(URI,{credentials: 'include'});
         const u = await t.json();
         document.getElementById('kashioutput').value=JSON.stringify(u);
       },false);
@@ -139,7 +176,7 @@
         const start = document.getElementById("user_retrentstart").value;
         const URI = `/api/v1/user/${document.getElementById("user_id").value}/history?${new URLSearchParams({start})}`;
         console.log('GET',URI)
-        const t = await fetch(URI);
+        const t = await fetch(URI, {credentials: 'include'});
         const u = await t.json();
         document.getElementById('useroutput').value=JSON.stringify(u);
       },false);

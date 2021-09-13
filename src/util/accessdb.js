@@ -187,10 +187,7 @@ const getUser = async (user_id) => {
   const user = TEST_BOOKS_DATABASE.users.find((x) => x.id === user_id);
   if(!user) return null;
 
-  return {
-    user_id: user_id,
-    user_name: user.user_name,
-  };
+  return user;
 };
 
 

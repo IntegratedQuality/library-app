@@ -93,7 +93,7 @@ router.post('/book/:id/rent',async (req, res) => {
   }
   //本・ユーザが存在、現在貸し出し可能である
   //貸し出し履歴の追加
-  rentBook(targetBook.id, req.user.user_id);
+  rentBook(targetBook.id, req.user.id);
   res.sendStatus(204);
 });
 
@@ -113,7 +113,7 @@ router.post('/book/:id/return',async (req, res) => {
     });
   }
   // 貸し出し履歴を取得
-  const rent_history = await getRentBooks(targetBook.id, req.user.user_id);
+  const rent_history = await getRentBooks(targetBook.id, req.user.id);
 
   if(!targetBook.is_rented || !rent_history){
     return res.status(409).json({
@@ -121,7 +121,7 @@ router.post('/book/:id/return',async (req, res) => {
     });
   }
   //本・ユーザが存在、現在返却可能である
-  await returnBook(targetBook.id, req.user.user_id);
+  await returnBook(targetBook.id, req.user.id);
   res.sendStatus(204);
 });
 
@@ -141,7 +141,7 @@ router.get('/user/:user_id/history', async (req, res) => {
     });
   }
   const user_id = parseInt(req.params.user_id);
-  if(req.user.user_id !== user_id){
+  if(req.user.id !== user_id){
     return res.status(403).json({
       message: 'アクセス権限がありません',
     });
