@@ -1,5 +1,3 @@
-const bcrypt = require('bcrypt');
-
 // 仮組み
 const TEST_BOOKS_DATABASE_DEFAULT = {
   books:[
@@ -190,23 +188,35 @@ const getUser = async (user_id) => {
   return user;
 };
 
+// ユーザ名からユーザ情報を取得
+const getUserByName = async (user_name) => {
+  const user = TEST_BOOKS_DATABASE.users.find((x) => x.name === user_name);
+  if(!user) return null;
 
-// ユーザ名とパスワードから認証
-const confirmPassword = async (user_name, password, done) => {
-  const foundUser = TEST_BOOKS_DATABASE.users.find((x)=>x.name === user_name);
-  if(!foundUser) return done(null, false, {message: 'not found user'});
-  
-  const isCorrectPassword = await bcrypt.compare(password, foundUser.password);
-  if(!isCorrectPassword) return done(null, false, {message: 'bad password'});
-
-  return done(null, foundUser);
+  return user;
 };
+
+// ユーザ作成
+const createUser = async (username, hashedPassword) => {
+  const newUser = {
+    'id':TEST_BOOKS_DATABASE.users.length+1,
+    'name':username,
+    // piyopiyo
+    'password':hashedPassword,
+  };
+  TEST_BOOKS_DATABASE.users.push(newUser);
+
+  return newUser;
+};
+
 
 module.exports = {
   initDetabase,
   getBookList,
   getBookFromISBN,
   getUser,
+  getUserByName,
+  createUser,
   addBook,
   findBooks,
   searchBooks,
@@ -215,5 +225,4 @@ module.exports = {
   returnBook,
   getRentAllBooksByBook,
   getRentAllBooksByUser,
-  confirmPassword,
 };

@@ -12,16 +12,31 @@
         <label for="password">パスワード</label><input type="password" name="password" placeholder="hogefuga">
         <input type="submit" value="ログイン">
       </form>
+      <button id="signup">サインアップ</button>
       <span id="loginstatus">非ログイン</span>
       <button id="logout">ログアウト</button>
       <textarea id="loginoutput" rows="10" cols="40" readonly></textarea>
       <script>
+        // セッション継続
+        async function firstlogin(){
+          const URI = `/api/v1/user`;
+          console.log("GET",URI);
+         return fetch(URI,{method: 'GET', credentials: 'include',headers: {'Content-Type': 'application/json'}});
+        }
+        firstlogin().then((res)=> res.json()).then((u)=>{
+          document.getElementById('loginoutput').value=JSON.stringify(u);
+          if(u.name){
+            document.getElementById('loginstatus').innerText=`${u.name}でログイン中`;
+          }
+        });
+
+        // ログイン処理
         const login =  document.getElementById('login');
         login.addEventListener('submit', async (e)=>{
           e.preventDefault();
           const username = login.username.value;
           const password = login.password.value;
-          const URI = `/login`;
+          const URI = `/api/v1/login`;
           console.log("POST",URI,{username,password});
           const t = await fetch(URI,{method: 'POST', credentials: 'include',headers: {'Content-Type': 'application/json'},body:JSON.stringify({username, password})});
           const u = await t.json();
@@ -30,6 +45,21 @@
             document.getElementById('loginstatus').innerText=`${u.name}でログイン中`;
           }
         },false);
+        // サインアップ処理
+        const signup = document.getElementById('signup');
+        signup.addEventListener('click', async (e) => {
+          const username = login.username.value;
+          const password = login.password.value;
+          const URI = `/api/v1/signup`
+          console.log("POST", URI, {username, password});
+          const t = await fetch(URI,{method: 'POST', credentials: 'include',headers: {'Content-Type': 'application/json'},body:JSON.stringify({username, password})});
+          const u = await t.json();
+          document.getElementById('loginoutput').value=JSON.stringify(u);
+          if(u.name){
+            document.getElementById('loginstatus').innerText=`${u.name}でログイン中`;
+          }
+        });
+        // ログアウト処理
         const logout = document.getElementById('logout');
         logout.addEventListener('click', async (e) => {
           const URI = `/logout`

@@ -133,6 +133,20 @@ router.get('/book/:id/history', async (req, res) => {
   res.json(await getRentAllBooksByBook(book_id, RETCNT, start));
 });
 
+// ユーザ情報
+router.get('/user', async (req, res) => {
+  if(!req.isAuthenticated() || !req.user){
+    return res.status(403).json({
+      message: 'ログインが必要です',
+    });
+  }
+  res.status(200).json({
+    id: req.user.id,
+    name: req.user.name,
+  });
+});
+
+
 // ユーザの貸し出し履歴
 router.get('/user/:user_id/history', async (req, res) => {
   if(!req.isAuthenticated() || !req.user){
