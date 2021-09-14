@@ -29,9 +29,6 @@ module.exports = (app) => {
   app.post('/login', (req, res, next) => {
     passport.authenticate('local',
       {
-        // なんかだめ
-        // usernameField: 'name',
-        // passwordField: 'password',
         session: true
       },(err, user, info) => {
         if(err) return  res.status(400).json({message: 'なぜここでエラー？'});
