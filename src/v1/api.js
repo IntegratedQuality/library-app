@@ -155,6 +155,51 @@ router.get('/book/:id',async (req,res) => {
   }
 });
 
+// 本の情報の書き換え
+router.post('/book/:id/edit',async (req,res) => {
+  //本の検索
+  const foundBook = await findBooks(req.params.id);
+
+  if(!foundBook){
+    res.status(404).json({
+      'errorMessage': `'${req.params.id}' is not found`
+    });
+
+    return;
+  }
+
+  // エラーチェック
+  // title
+  if(req.body.title) {
+    if(req.body.title === ''){
+      res.status(400).json({
+        'errorMessage': 'title must not empty'
+      });
+      
+      return;
+    }
+  }
+  // ISBN
+  if(req.body.isbn) {
+    if(!ISBN.isJustifiable(req.body.isbn)) {
+      res.status(400).json({
+        'errorMessage': 'bad ISBN'
+      });
+
+      return;
+    }
+  }
+  // 変更
+  if(req.body.title) {
+    foundBook.title = req.body.title;
+  }
+  // isbn
+  if(req.body.isbn) {
+    foundBook.isbn = req.body.isbn;
+  }
+  res.status(200).json(foundBook);
+});
+
 // 本のレンタル
 router.post('/book/:id/rent',async (req, res) => {
   //本の検索
@@ -202,8 +247,12 @@ router.post('/book/:id/return',async (req, res) => {
     return;
   }
   // 貸し出し履歴を取得
-  const rent_history = TEST_BOOKS_DATABASE.rent_ret_history.find(x => x.return_time===null && x.user_id === TEST_USER.id);
-
+  const rent_history = TEST_BOOKS_DATABASE.rent_ret_history
+    .find(
+      x => x.return_time===null &&
+        x.user_id === TEST_USER.id &&
+        x.book_id === targetBook.id);
+  
   if(!targetBook.is_rented || !rent_history){
     res.status(409).json({
       'errorMessage': 'あなたに貸出していない'
