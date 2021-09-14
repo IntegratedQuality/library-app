@@ -27,6 +27,7 @@ module.exports = (app) => {
     secret: SECRET_KEY,
     resave: true,
     saveUninitialized: false,
+    // store: ...
   }));
   
   app.use(passport.initialize());
