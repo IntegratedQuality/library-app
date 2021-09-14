@@ -89,13 +89,13 @@ describe('本の貸し出しテスト', ()=>{
     initDetabase();
     passportStub.install(app);
     passportStub.login({
-      id: 1,
-      name: 'c-gengo-kun',
+      id: 'c-gengo-kun',
+      name: 'C言語君',
     });
   });
   test('本を貸し借りできる',async ()=>{
     //貸出数
-    const total = (await request(app).get('/api/v1/user/1/history')).body.total;
+    const total = (await request(app).get('/api/v1/user/c-gengo-kun/history')).body.total;
     //確認
     const res_info = await request(app).get('/api/v1/book/1');
     expect(res_info.body.is_rented).toBeFalsy();
@@ -106,8 +106,8 @@ describe('本の貸し出しテスト', ()=>{
     const res_info2 = await request(app).get('/api/v1/book/1');
     expect(res_info2.body.is_rented).toBeTruthy();
     //貸出数の増加
-    const res_retrent2 = await request(app).get('/api/v1/user/1/history');
-    expect(typeof res_retrent2.body.list[0].user_id).toBe('number');
+    const res_retrent2 = await request(app).get('/api/v1/user/c-gengo-kun/history');
+    expect(res_retrent2.body.list[0].user_id).toBe('c-gengo-kun');
     expect(res_retrent2.body.list[0].rent_time).not.toBeNull();
     expect(res_retrent2.body.list[0].return_time).toBeNull();
     expect(res_retrent2.body.total).toBe(total+1);
@@ -118,7 +118,7 @@ describe('本の貸し出しテスト', ()=>{
     const res_info3 = await request(app).get('/api/v1/book/1');
     expect(res_info3.body.is_rented).toBeFalsy();
     //貸出関係図のnull埋め
-    const res_retrent3 = await request(app).get('/api/v1/user/1/history');
+    const res_retrent3 = await request(app).get('/api/v1/user/c-gengo-kun/history');
     expect(res_retrent3.body.list[0].return_time).not.toBeNull();
   });
   test('無い本は貸せない',async ()=>{
@@ -135,8 +135,8 @@ describe('本の貸し出しテスト', ()=>{
     //貸し出し
     await request(app).post('/api/v1/book/1/rent');
     passportStub.login({
-      id: 2,
-      name: 'meijiro-kun',
+      id: 'meijiro-kun',
+      name: 'めいじろう君',
     });
     //貸し出し
     const res_rent2 = await request(app).post('/api/v1/book/1/rent');
@@ -162,15 +162,15 @@ describe('本の貸し出し状況取得', ()=>{
     initDetabase();
     passportStub.install(app);
     passportStub.login({
-      id: 1,
-      name: 'c-gengo-kun',
+      id: 'c-gengo-kun',
+      name: 'C言語君',
     });
   });
   test('本の貸し出し状況を取得できる',async ()=>{
     //確認
     const res_getbookhistory = await request(app).get('/api/v1/book/1/history');
     const total = res_getbookhistory.body.total;
-    const res_getuserhistory = await request(app).get('/api/v1/user/1/history');
+    const res_getuserhistory = await request(app).get('/api/v1/user/c-gengo-kun/history');
     const user_total = res_getuserhistory.body.total;
     //貸し出し
     await request(app)
@@ -180,13 +180,13 @@ describe('本の貸し出し状況取得', ()=>{
     const res_getbookhistory2 = await request(app).get('/api/v1/book/1/history');
     const total2 = res_getbookhistory2.body.total;
     expect(total2).toBe(total+1);
-    const res_getuserhistory2 = await request(app).get('/api/v1/user/1/history');
+    const res_getuserhistory2 = await request(app).get('/api/v1/user/c-gengo-kun/history');
     const user_total2 = res_getuserhistory2.body.total;
     expect(user_total2).toBe(user_total+1);
   });
   test('非ログインユーザの情報は取得できない',async ()=>{
     //確認
-    const res_getbookhistory = await request(app).get('/api/v1/user/2/history');
+    const res_getbookhistory = await request(app).get('/api/v1/user/meijiro-kun/history');
     expect(res_getbookhistory.status).toBe(403);
   });
 });

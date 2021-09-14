@@ -154,15 +154,14 @@ router.get('/user/:user_id/history', async (req, res) => {
       message: 'ログインが必要です',
     });
   }
-  const user_id = parseInt(req.params.user_id);
-  if(req.user.id !== user_id){
+  if(req.user.id !== req.params.user_id){
     return res.status(403).json({
       message: 'アクセス権限がありません',
     });
   }
   // これ降順のほうが嬉しいな
   const start = parseInt(req.query.start) || 0;
-  res.json(await getRentAllBooksByUser(user_id, RETCNT, start));
+  res.json(await getRentAllBooksByUser(req.params.user_id, RETCNT, start));
 });
 
 

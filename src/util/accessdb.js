@@ -50,13 +50,13 @@ const TEST_BOOKS_DATABASE_DEFAULT = {
 
   ],
   'users':[{
-    'id':1,
-    'name':'c-gengo-kun',
+    'id':'c-gengo-kun',
+    'name':'C言語君',
     // hogefuga
     'password':'$2a$10$HtiJr6fb/pk6.S/8lQ5JMeR3QSKYA3cl.halLopw3GeRATC.yZtEC',
   },{
-    'id':2,
-    'name':'meijiro-kun',
+    'id':'meijiro-kun',
+    'name':'めいじろう',
     // piyopiyo
     'password':'$2a$10$U5.oQ/0lF30quYwQHSn.eesX6XVDpScLl65Bz/042MPnWAYfsyOkq',
   }
@@ -65,12 +65,12 @@ const TEST_BOOKS_DATABASE_DEFAULT = {
     'book_id':1,
     'rent_time': new Date(2020, 0,1),
     'return_time': new Date(2020, 0,2),
-    'user_id':1,
+    'user_id':'c-gengo-kun',
   },{
     'book_id':2,
     'rent_time': new Date(2019, 0,1),
     'return_time': new Date(2019, 0,2),
-    'user_id':2,
+    'user_id':'meijiro-kun',
   }
   ]
 };
@@ -181,26 +181,18 @@ const returnBook = async (book_id, user_id) => {
 };
 
 // ユーザからユーザ情報を取得
-const getUser = async (user_id) => {
+const getUserById = async (user_id) => {
   const user = TEST_BOOKS_DATABASE.users.find((x) => x.id === user_id);
   if(!user) return null;
 
   return user;
 };
 
-// ユーザ名からユーザ情報を取得
-const getUserByName = async (user_name) => {
-  const user = TEST_BOOKS_DATABASE.users.find((x) => x.name === user_name);
-  if(!user) return null;
-
-  return user;
-};
-
 // ユーザ作成
-const createUser = async (username, hashedPassword) => {
+const createUser = async (userid, screenname, hashedPassword) => {
   const newUser = {
-    'id':TEST_BOOKS_DATABASE.users.length+1,
-    'name':username,
+    'id':userid,
+    'name':screenname,
     // piyopiyo
     'password':hashedPassword,
   };
@@ -208,14 +200,21 @@ const createUser = async (username, hashedPassword) => {
 
   return newUser;
 };
+// ユーザ名変更
+const changeUserName = async (user_id, screenname) => {
+  const user = TEST_BOOKS_DATABASE.users.find((x) => x.id === user_id);
+  if(!user) return null;
+  user.name = screenname;
+  
+  return user;
+};
 
 
 module.exports = {
   initDetabase,
   getBookList,
   getBookFromISBN,
-  getUser,
-  getUserByName,
+  getUserById,
   createUser,
   addBook,
   findBooks,
@@ -225,4 +224,5 @@ module.exports = {
   returnBook,
   getRentAllBooksByBook,
   getRentAllBooksByUser,
+  changeUserName,
 };
