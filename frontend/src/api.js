@@ -19,3 +19,5 @@ async function fetchBookData(bookID) {
     const u = await t.json();
     return u;
 }
+
+export { fetchSearchResults, fetchBookData };

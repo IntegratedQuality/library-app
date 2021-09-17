@@ -1,4 +1,5 @@
-function Information() {
+import React from 'react';
+export default function Information() {
   return (
     <article className="col-8">
       <h4 className="display-6 pb-3">これはなに？</h4>
@@ -13,4 +14,4 @@ function Information() {
       <p className="fs-5 pb-5">各書籍の個別ページから出来ます。</p>
     </article>
   );
-}
+};

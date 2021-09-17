@@ -1,4 +1,9 @@
-class BookCatalogue extends React.Component {
+import React from 'react';
+import { fetchSearchResults } from './api.js';
+import Pagination from './pagination.js';
+import BookList from './book_list.js';
+
+export default class BookCatalogue extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -86,4 +91,4 @@ class BookCatalogue extends React.Component {
       );
     }
   }
-}
+};

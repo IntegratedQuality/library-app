@@ -1,4 +1,16 @@
-class LibraryApp extends React.Component {
+import React from 'react';
+import BookCatalogue from './book_catalogue';
+import SearchPage from './search_page';
+import Information from './information';
+import ReturnPage from './return';
+import RegisterPage from './register';
+import BookDetail from './book';
+import EditPage from './edit';
+import NavigationBar from './navbar';
+import Sidebar from './sidebar';
+
+
+export default class LibraryApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,4 +57,4 @@ class LibraryApp extends React.Component {
       </div>
     );
   }
-}
+};

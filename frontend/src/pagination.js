@@ -1,4 +1,5 @@
-class Pagination extends React.Component {
+import React from 'react';
+export default class Pagination extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -34,4 +35,4 @@ class Pagination extends React.Component {
       </nav>
     );
   }
-}
+};
