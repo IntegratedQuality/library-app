@@ -1,6 +1,6 @@
 'use strict';
 
-const ISBN = require('../src/backend/util/isbn');
+const ISBN = require('../src/util/isbn');
 
 const correctISBN =[
   '9784088807232',
