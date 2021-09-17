@@ -16,6 +16,7 @@ const confirmPassword = async (user_id, password, done) => {
 };
 
 const saltRounds = 10;
+const forbiddenPasswordChar = /[^a-zA-Z0-9,.?_\-+!"#$%&'()=~^*/\\@;:<>{}[\]]/;
 // ハッシュ生成
 const hashPasword = (password) => bcrypt.hashSync(password, saltRounds);
 
@@ -28,6 +29,9 @@ const signupUser = async(user_id, password, done)=>{
   if(existUser){
     return done(null, false, {message:'すでに使用されているusernameです'});
   }
+  if(password.match(forbiddenPasswordChar)){
+    return done(null, false, {message:'passwordに使用できない文字が含まれています'});
+  }
   if(password.length<8){
     return done(null, false, {message:'passwordは8文字以上にしましょう'});
   }
@@ -39,4 +43,5 @@ const signupUser = async(user_id, password, done)=>{
 module.exports={
   signupUser,
   confirmPassword,
+  forbiddenPasswordChar,
 };
