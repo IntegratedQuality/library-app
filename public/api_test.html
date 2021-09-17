@@ -6,6 +6,75 @@
   </head>
   <body>
     <article>
+      <h2>ログイン状態</h2>
+      <form action="/api/v1/books" method="post" id="login">
+        <label for="username">ユーザID</label><input type="text" name="username" placeholder="c-gengo-kun"/>
+        <label for="screenname">表示名</label><input type="text" name="screenname" placeholder="-"/>
+        <label for="password">パスワード</label><input type="password" name="password" placeholder="hogefuga">
+        <input type="submit" value="ログイン">
+      </form>
+      <button id="signup">サインアップ</button>
+      <span id="loginstatus">非ログイン</span>
+      <button id="logout">ログアウト</button>
+      <textarea id="loginoutput" rows="10" cols="40" readonly></textarea>
+      <script>
+        // セッション継続
+        async function firstlogin(){
+          const URI = `/api/v1/user`;
+          console.log("GET",URI);
+         return fetch(URI,{method: 'GET', credentials: 'include',headers: {'Content-Type': 'application/json'}});
+        }
+        firstlogin().then((res)=> res.json()).then((u)=>{
+          document.getElementById('loginoutput').value=JSON.stringify(u);
+          if(u.name){
+            document.getElementById('loginstatus').innerText=`${u.name}(@${u.id})でログイン中`;
+          }
+        });
+
+        // ログイン処理
+        const login =  document.getElementById('login');
+        login.addEventListener('submit', async (e)=>{
+          e.preventDefault();
+          const username = login.username.value;
+          const password = login.password.value;
+          const URI = `/api/v1/login`;
+          console.log("POST",URI,{username,password});
+          const t = await fetch(URI,{method: 'POST', credentials: 'include',headers: {'Content-Type': 'application/json'},body:JSON.stringify({username, password})});
+          const u = await t.json();
+          document.getElementById('loginoutput').value=JSON.stringify(u);
+          if(u.name){
+            document.getElementById('loginstatus').innerText=`${u.name}(@${u.id})でログイン中`;
+          }
+        },false);
+        // サインアップ処理
+        const signup = document.getElementById('signup');
+        signup.addEventListener('click', async (e) => {
+          const username = login.username.value;
+          const password = login.password.value;
+          const screenname = login.screenname.value;
+          const URI = `/api/v1/signup`
+          console.log("POST", URI, {username, password,screenname});
+          const t = await fetch(URI,{method: 'POST', credentials: 'include',headers: {'Content-Type': 'application/json'},body:JSON.stringify({username, password,screenname})});
+          const u = await t.json();
+          document.getElementById('loginoutput').value=JSON.stringify(u);
+          if(u.name){
+            document.getElementById('loginstatus').innerText=`${u.name}(@${u.id})でログイン中`;
+          }
+        });
+        // ログアウト処理
+        const logout = document.getElementById('logout');
+        logout.addEventListener('click', async (e) => {
+          const URI = `/logout`
+          console.log("POST", URI)
+          const t = await fetch(URI,{method: 'POST', credentials: 'include'});
+          if(t.status===200){
+            document.getElementById('loginstatus').innerText=`非ログイン`;
+            document.getElementById('loginoutput').value="";
+          }
+        });
+      </script>
+    </article>
+    <article>
       <h2>本の追加</h2>
       <form action="/api/v1/books" method="post" id="addbook">
         <label for="title">本のタイトル</label><input type="text" name="title" />
@@ -22,7 +91,7 @@
           const isbn = addbook.isbn.value;
           const URI = `/api/v1/books`;
           console.log("PUT",URI,{title,isbn});
-          const t = await fetch(URI,{method: 'PUT',headers: {'Content-Type': 'application/json'},body:JSON.stringify({title,isbn})});
+          const t = await fetch(URI,{method: 'PUT', credentials: 'include',headers: {'Content-Type': 'application/json'},body:JSON.stringify({title,isbn})});
           const u = await t.json();
           document.getElementById('addbookoutput').value=JSON.stringify(u);
         },false);
@@ -66,7 +135,7 @@
           const start = getform.start.value;
           const URI = `/api/v1/books?${new URLSearchParams({start})}`;
           console.log("GET",URI);
-          const t = await fetch(URI);
+          const t = await fetch(URI, {credentials: 'include'});
           const u = await t.json();
           document.getElementById('getoutput').value=JSON.stringify(u);
         },false);
@@ -88,7 +157,7 @@
           const start = searchform.start.value;
           const URI = `/api/v1/books/search?${new URLSearchParams({q,start})}`;
           console.log("GET",URI);
-          const t = await fetch(URI);
+          const t = await fetch(URI,{credentials: 'include'});
           const u = await t.json();
           document.getElementById('searchoutput').value=JSON.stringify(u);
         },false);
@@ -96,7 +165,6 @@
     </article>
     <article>
       <h2>貸し借り</h2>
-      ユーザはTESTUSER1になっています
       <form id="bookform">
         <label for="id">本番号</label><input type="number" name="id" id="book_id" value='1'>
         <label for="start">開始位置</label><input type="number" name="start">
@@ -112,14 +180,14 @@
     <script>
       const bookform =  document.getElementById('bookform');
       document.getElementById('getbook').addEventListener('click', async ()=>{
-        const t = await fetch(`/api/v1/book/${bookform.id.value}`);
+        const t = await fetch(`/api/v1/book/${bookform.id.value}`, {credentials: 'include'});
         const u = await t.json();
         document.getElementById('kashioutput').value=JSON.stringify(u);
       },false);
       document.getElementById('rent').addEventListener('click', async ()=>{
         const URI = `/api/v1/book/${bookform.id.value}/rent`;
         console.log('POST',URI);
-        const t = await fetch(URI,{method:"POST"});
+        const t = await fetch(URI,{method:"POST", credentials: 'include'});
         if(t.status===204){
           document.getElementById('kashioutput').value=`Status ${t.status}`;
           return;
@@ -130,7 +198,7 @@
       document.getElementById('return').addEventListener('click', async ()=>{
         const URI = `/api/v1/book/${bookform.id.value}/return`;
         console.log('POST', URI);
-        const t = await fetch(URI,{method:"POST"});
+        const t = await fetch(URI,{method:"POST", credentials: 'include'});
         if(t.status===204){
           document.getElementById('kashioutput').value=`Status ${t.status}`;
           return;
@@ -142,7 +210,7 @@
           const start = bookform.start.value;
         const URI = `/api/v1/book/${bookform.id.value}/history?${new URLSearchParams({start})}`;
         console.log('GET',URI)
-        const t = await fetch(URI);
+        const t = await fetch(URI,{credentials: 'include'});
         const u = await t.json();
         document.getElementById('kashioutput').value=JSON.stringify(u);
       },false);
@@ -150,7 +218,7 @@
     <article>
       <h2>ユーザ履歴</h2>
       <form>
-        <label for="id">ユーザ番号</label><input type="number" name="id" id="user_id" value='1'>
+        <label for="id">ユーザID</label><input type="text" name="id" id="user_id" value='c-gengo-kun'>
         <label for="start">開始位置</label><input type="number" name="start" id="user_retrentstart">
       </form>
       <button id="getuserret">ユーザ貸し出し状況</button>
@@ -163,7 +231,7 @@
         const start = document.getElementById("user_retrentstart").value;
         const URI = `/api/v1/user/${document.getElementById("user_id").value}/history?${new URLSearchParams({start})}`;
         console.log('GET',URI)
-        const t = await fetch(URI);
+        const t = await fetch(URI, {credentials: 'include'});
         const u = await t.json();
         document.getElementById('useroutput').value=JSON.stringify(u);
       },false);
