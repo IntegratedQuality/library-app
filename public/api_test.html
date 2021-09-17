@@ -29,6 +29,30 @@
       </script>
     </article>
     <article>
+      <h2>本の更新</h2>
+      <form action="/api/v1/book" method="post" id="editbook">
+        <label for="id">本番号</label><input type="number" name="id" id="book_id" value='1'>
+        <label for="title">本のタイトル</label><input type="text" name="title" />
+        <label for="isbn">ISBN</label><input type="text" name="isbn">
+        <input type="submit" value="更新">
+      </form>
+      <textarea id="editbookoutput" rows="10" cols="40" readonly></textarea>
+      <script>
+        const editbook =  document.getElementById('editbook');
+        editbook.addEventListener('submit', async (e)=>{
+          e.preventDefault();
+          const id = editbook.id.value;
+          const title = editbook.title.value;
+          const isbn = editbook.isbn.value;
+          const URI = `/api/v1/book/${id}/edit`;
+          console.log("POST",URI,{title,isbn});
+          const t = await fetch(URI,{method: 'POST',headers: {'Content-Type': 'application/json'},body:JSON.stringify({title,isbn})});
+          const u = await t.json();
+          document.getElementById('editbookoutput').value=JSON.stringify(u);
+        },false);
+      </script>
+    </article>
+    <article>
       <h2>本の一覧の取得</h2>
       <form action="/api/v1/books" method="get" id="get">
         <label for="start">開始位置</label><input type="number" name="start">
