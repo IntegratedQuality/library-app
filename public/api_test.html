@@ -6,6 +6,58 @@
   </head>
   <body>
     <article>
+      <h2>書誌情報取得</h2>
+      <div>
+        <table>
+          <thead>
+            <tr><th>ISBN</th><th>書誌情報</th><th>書影</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>9784000029353</td><td>無</td><td>-</td></tr>
+            <tr><td>9784863542174</td><td>有</td><td>無</td></tr>
+            <tr><td>9784812483800</td><td>有</td><td>有</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <form action="" method="get" id="getbookdata">
+        <label for="isbn">ISBN</label>
+        <input type="text" id="isbn" name="isbn" value="9784812483800">
+        <input type="submit" value="取得">
+      </form>
+      <img src="" alt="書影" id="calligraphy">
+      <textarea id="getbookdata-output" rows="10" cols="40" readonly></textarea>
+      <script>
+        const fetchBookData = async (isbn) => {
+          const URI = `https://api.openbd.jp/v1/get?${new URLSearchParams({ isbn } )}`;
+          console.log("GET", URI);
+          const t = await fetch(URI);
+          const u = await t.json();
+          return u[0];
+        }
+        const getbookdata = document.getElementById('getbookdata');
+        getbookdata.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const isbn = getbookdata.isbn.value;
+          const data = await fetchBookData(isbn);
+          console.log(data);
+          if (data === null) {
+            console.log('openDB上にデータがありません');
+          }
+          // 書影を反映
+          const calligraphy = document.getElementById('calligraphy');
+          try {
+            const URL = data.onix.CollateralDetail.SupportingResource[0].ResourceVersion[0].ResourceLink;
+            console.log('image URL', URL);
+            calligraphy.setAttribute('src', URL);
+          } catch (error) {
+            calligraphy.setAttribute('src', '');
+            console.error(error);
+          }
+          document.getElementById('getbookdata-output').value = JSON.stringify(data);
+        }, false);
+      </script>
+    </article>
+    <article>
       <h2>ログイン状態</h2>
       <form action="/api/v1/books" method="post" id="login">
         <label for="username">ユーザID</label><input type="text" name="username" placeholder="c-gengo-kun"/>
