@@ -5,8 +5,8 @@ const app = require('../src/app');
 const getNumberOfBooks = async (x) => (await request(app).get('/api/v1/books')).body.total;
 
 beforeEach(async ()=> await request(app)
-      .post('/api/v1/book/1/return')
-      .send()
+  .post('/api/v1/book/1/return')
+  .send()
 );
 
 
@@ -45,6 +45,63 @@ describe('本の取得テスト', ()=>{
     expect(typeof res.is_rented).toBe('boolean');
   });
 });
+
+describe('本の情報更新', ()=>{
+  test('本の情報を更新できる',async ()=>{
+    const postres = await request(app)
+      .post('/api/v1/book/1/edit')
+      .send({
+        'title': 'みずほ銀行システム統合、苦闘の19年史',
+        'isbn':'9784296105359'
+      });
+    expect(postres.body.title).toBe('みずほ銀行システム統合、苦闘の19年史');
+    expect(postres.body.isbn).toBe('9784296105359');
+    // 再リクエスト
+    const reget = (await request(app).get('/api/v1/book/1')).body;
+    expect(reget.title).toBe('みずほ銀行システム統合、苦闘の19年史');
+    expect(reget.isbn).toBe('9784296105359');
+  });
+  test('ISBNがだめなら更新しない',async ()=>{
+    const postres = await request(app)
+      .post('/api/v1/book/1/edit')
+      .send({
+        'title': '本テストX',
+        'isbn':'9784296105358'
+      });
+    expect(postres.status).toBe(400);
+    
+    // 再リクエスト
+    const reget = (await request(app).get('/api/v1/book/1')).body;
+    expect(reget.title).not.toBe('本テストX');
+    expect(reget.isbn).not.toBe('9784296105358');
+  });
+  test('ISBNだけでも更新',async ()=>{
+    const postres = await request(app)
+      .post('/api/v1/book/1/edit')
+      .send({
+        'isbn':'9784254127140'
+      });
+    expect(postres.status).toBe(200);
+    expect(postres.body.isbn).toBe('9784254127140');
+    
+    // 再リクエスト
+    const reget = (await request(app).get('/api/v1/book/1')).body;
+    expect(reget.isbn).toBe('9784254127140');
+  });
+  test('タイトルだけでも更新',async ()=>{
+    const postres = await request(app)
+      .post('/api/v1/book/1/edit')
+      .send({
+        'title': '新しい本～～～',
+      });
+    expect(postres.status).toBe(200);
+    expect(postres.body.title).toBe('新しい本～～～');
+    // 再リクエスト
+    const reget = (await request(app).get('/api/v1/book/1')).body;
+    expect(reget.title).toBe('新しい本～～～');
+  });
+});
+
 
 describe('本の追加テスト', ()=>{
   test('本を追加できる',async ()=>{
@@ -144,7 +201,6 @@ describe('本の貸し出しテスト', ()=>{
       .send();
     expect(res_rent2.status).toBe(409);
   });
-
 });
 
 describe('本の貸し出し状況取得', ()=>{
@@ -166,6 +222,29 @@ describe('本の貸し出し状況取得', ()=>{
     const user_total2 = res_getuserhistory2.body.total;
     expect(user_total2).toBe(user_total+1);
   });
+
+  test('ユーザ貸し出し状況から適切に取得',async ()=>{
+    //貸し出し
+    await request(app)
+      .post('/api/v1/book/1/rent')
+      .send();
+    await request(app)
+      .post('/api/v1/book/2/rent')
+      .send();
+    await request(app)
+      .post('/api/v1/book/3/rent')
+      .send();
+    //返却
+    await request(app)
+      .post('/api/v1/book/2/return')
+      .send();
+    
+    const res_getuserhistory = await request(app).get('/api/v1/user/1/history');
+    const rent_item = res_getuserhistory.body.list.filter((x) => x.return_time === null).map((x)=>x.book_id);
+    expect(rent_item).toEqual(expect.arrayContaining([1,3]));
+    expect(rent_item).not.toEqual(expect.arrayContaining([2]));
+  });
+
 });
 
 /**[TODO] ユーザアクセス権等

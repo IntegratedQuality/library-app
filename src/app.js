@@ -10,7 +10,7 @@ app.use(express.json());
 const apirouter = require('./v1/api');
 app.use('/api/v1/', apirouter);
 // 静的ファイル
-app.use(express.static('public'));
+app.use(express.static('frontend/public'));
 
 app.listen(PORT,()=>{
   console.log(`listen http://localhost:${PORT}`);

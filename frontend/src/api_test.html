@@ -1,21 +1,115 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-  <meta charset="UTF-8" />
-  <title>API practice</title>
-</head>
-
-<body>
-  <article>
-    <h2>本の追加</h2>
-    <form action="/api/v1/books" method="post" id="addbook">
-      <label for="title">本のタイトル</label><input type="text" name="title" />
-      <label for="isbn">ISBN</label><input type="text" name="isbn">
-      <input type="hidden" name="_method" value="PUT">
-      <input type="submit" value="追加">
-    </form>
-    <textarea id="addbookoutput" rows="10" cols="40" readonly></textarea>
+  <head>
+    <meta charset="UTF-8" />
+    <title>API practice</title>
+  </head>
+  <body>
+    <article>
+      <h2>本の追加</h2>
+      <form action="/api/v1/books" method="post" id="addbook">
+        <label for="title">本のタイトル</label><input type="text" name="title" />
+        <label for="isbn">ISBN</label><input type="text" name="isbn">
+        <input type="hidden" name="_method" value="PUT">
+        <input type="submit" value="追加">
+      </form>
+      <textarea id="addbookoutput" rows="10" cols="40" readonly></textarea>
+      <script>
+        const addbook =  document.getElementById('addbook');
+        addbook.addEventListener('submit', async (e)=>{
+          e.preventDefault();
+          const title = addbook.title.value;
+          const isbn = addbook.isbn.value;
+          const URI = `/api/v1/books`;
+          console.log("PUT",URI,{title,isbn});
+          const t = await fetch(URI,{method: 'PUT',headers: {'Content-Type': 'application/json'},body:JSON.stringify({title,isbn})});
+          const u = await t.json();
+          document.getElementById('addbookoutput').value=JSON.stringify(u);
+        },false);
+      </script>
+    </article>
+    <article>
+      <h2>本の更新</h2>
+      <form action="/api/v1/book" method="post" id="editbook">
+        <label for="id">本番号</label><input type="number" name="id" id="book_id" value='1'>
+        <label for="title">本のタイトル</label><input type="text" name="title" />
+        <label for="isbn">ISBN</label><input type="text" name="isbn">
+        <input type="submit" value="更新">
+      </form>
+      <textarea id="editbookoutput" rows="10" cols="40" readonly></textarea>
+      <script>
+        const editbook =  document.getElementById('editbook');
+        editbook.addEventListener('submit', async (e)=>{
+          e.preventDefault();
+          const id = editbook.id.value;
+          const title = editbook.title.value;
+          const isbn = editbook.isbn.value;
+          const URI = `/api/v1/book/${id}/edit`;
+          console.log("POST",URI,{title,isbn});
+          const t = await fetch(URI,{method: 'POST',headers: {'Content-Type': 'application/json'},body:JSON.stringify({title,isbn})});
+          const u = await t.json();
+          document.getElementById('editbookoutput').value=JSON.stringify(u);
+        },false);
+      </script>
+    </article>
+    <article>
+      <h2>本の一覧の取得</h2>
+      <form action="/api/v1/books" method="get" id="get">
+        <label for="start">開始位置</label><input type="number" name="start">
+        <input type="submit" value="取得">
+      </form>
+      <textarea id="getoutput" rows="10" cols="40" readonly></textarea>
+      <script>
+        const getform =  document.getElementById('get');
+        getform.addEventListener('submit', async (e)=>{
+          e.preventDefault();
+          const start = getform.start.value;
+          const URI = `/api/v1/books?${new URLSearchParams({start})}`;
+          console.log("GET",URI);
+          const t = await fetch(URI);
+          const u = await t.json();
+          document.getElementById('getoutput').value=JSON.stringify(u);
+        },false);
+      </script>
+    </article>
+    <article>
+      <h2>検索</h2>
+      <form action="/api/v1/books/search" method="get" id="search">
+        <label for="q">検索文字列</label><input type="text" name="q" placeholder="Wiki" required>
+        <label for="start">開始位置</label><input type="number" name="start">
+        <input type="submit" value="検索">
+      </form>
+      <textarea id="searchoutput" rows="10" cols="40" readonly></textarea>
+      <script>
+        const searchform =  document.getElementById('search');
+        searchform.addEventListener('submit', async (e)=>{
+          e.preventDefault();
+          const q = searchform.q.value;
+          const start = searchform.start.value;
+          const URI = `/api/v1/books/search?${new URLSearchParams({q,start})}`;
+          console.log("GET",URI);
+          const t = await fetch(URI);
+          const u = await t.json();
+          document.getElementById('searchoutput').value=JSON.stringify(u);
+        },false);
+      </script>
+    </article>
+    <article>
+      <h2>貸し借り</h2>
+      ユーザはTESTUSER1になっています
+      <form id="bookform">
+        <label for="id">本番号</label><input type="number" name="id" id="book_id" value='1'>
+        <label for="start">開始位置</label><input type="number" name="start">
+      </form>
+      <button id="getbook">本の情報の取得</button>
+      <button id="rent">本の貸し出し</button>
+      <button id="return">本の返却</button>
+      <button id="book_history">本の貸し出し履歴</button>
+      </form>
+      <br>
+      <textarea id="kashioutput" rows="10" cols="40" readonly></textarea>
+    </article>
+>>>>>>> cd4dcf2d8b9dd70fa2491e8b3220846e346e0739
     <script>
       const addbook = document.getElementById('addbook');
       addbook.addEventListener('submit', async (e) => {
