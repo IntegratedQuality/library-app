@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8">
+	<title>ユーザーページ</title>
+	<link href="css/bootstrap.css" rel="stylesheet">
+	<link href="css/user.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=yes" />
+</head>
+
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a href="#home" class="navbar-brand page-scroll">Integrated Quality</a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="introduction.html">ご利用案内</a></li>
+　　　　　 <li><a href="book.html">本の一覧</a></li>
+          <li><a href="user.html">ユーザーページ</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+	<header id="home" class="header">
+		<div class="copy text-center">
+			<font face="メイリオ" color=331217><h1><b>ユーザーページ</b></h1></font>
+			<font face="cursive" color=331217><h2>-User Page-</h2></font>
+	  </div>
+	</header>
+
+  <section id="ranking" class="ranking">
+    <div class="container">
+      <div class="row"><center>
+        <article>
+          <h2><b>ログイン・ログアウト</b></h2>
+          <form action="/api/v1/books" method="post" id="login">
+            <label for="username">ユーザID</label><input type="text" name="username" placeholder="c-gengo-kun"/>
+            <label for="screenname">表示名</label><input type="text" name="screenname" placeholder="-"/>
+            <label for="password">パスワード</label><input type="password" name="password" placeholder="hogefuga">
+            <input type="submit" value="ログイン">
+          </form>
+          <button id="signup">サインアップ</button>
+          <span id="loginstatus">非ログイン</span>
+          <button id="logout">ログアウト</button>
+          <textarea id="loginoutput" rows="10" cols="40" readonly></textarea>
+          <script>
+            // セッション継続
+            async function firstlogin(){
+              const URI = `/api/v1/user`;
+              console.log("GET",URI);
+             return fetch(URI,{method: 'GET', credentials: 'include',headers: {'Content-Type': 'application/json'}});
+            }
+            firstlogin().then((res)=> res.json()).then((u)=>{
+              document.getElementById('loginoutput').value=JSON.stringify(u);
+              if(u.name){
+                document.getElementById('loginstatus').innerText=`${u.name}(@${u.id})でログイン中`;
+              }
+            });
+
+            // ログイン処理
+            const login =  document.getElementById('login');
+            login.addEventListener('submit', async (e)=>{
+              e.preventDefault();
+              const username = login.username.value;
+              const password = login.password.value;
+              const URI = `/api/v1/login`;
+              console.log("POST",URI,{username,password});
+              const t = await fetch(URI,{method: 'POST', credentials: 'include',headers: {'Content-Type': 'application/json'},body:JSON.stringify({username, password})});
+              const u = await t.json();
+              document.getElementById('loginoutput').value=JSON.stringify(u);
+              if(u.name){
+                document.getElementById('loginstatus').innerText=`${u.name}(@${u.id})でログイン中`;
+              }
+            },false);
+            // サインアップ処理
+            const signup = document.getElementById('signup');
+            signup.addEventListener('click', async (e) => {
+              const username = login.username.value;
+              const password = login.password.value;
+              const screenname = login.screenname.value;
+              const URI = `/api/v1/signup`
+              console.log("POST", URI, {username, password,screenname});
+              const t = await fetch(URI,{method: 'POST', credentials: 'include',headers: {'Content-Type': 'application/json'},body:JSON.stringify({username, password,screenname})});
+              const u = await t.json();
+              document.getElementById('loginoutput').value=JSON.stringify(u);
+              if(u.name){
+                document.getElementById('loginstatus').innerText=`${u.name}(@${u.id})でログイン中`;
+              }
+            });
+            // ログアウト処理
+            const logout = document.getElementById('logout');
+            logout.addEventListener('click', async (e) => {
+              const URI = `/logout`
+              console.log("POST", URI)
+              const t = await fetch(URI,{method: 'POST', credentials: 'include'});
+              if(t.status===200){
+                document.getElementById('loginstatus').innerText=`非ログイン`;
+                document.getElementById('loginoutput').value="";
+              }
+            });
+          </script>
+        </article>
+      </center></div>
+    </div>
+  </section>
+
+	<section id="ranking" class="ranking">
+		<div class="container">
+			<div class="row">
+				<h2 class="text-center"><b>ユーザー情報</b></h2>
+        <div class="col-sm-6"><center>
+          <h2>貸出・返却手続き</h2>
+          <article>
+            <form id="bookform">
+              <label for="id">本番号</label><input type="number" name="id" id="book_id" value='1'>
+              <label for="start">開始位置</label><input type="number" name="start">
+            </form>
+            <button id="getbook">本の情報の取得</button>
+            <button id="rent">本の貸し出し</button>
+            <button id="return">本の返却</button>
+            <button id="book_history">本の貸し出し履歴</button>
+            </form>
+            <br>
+            <textarea id="kashioutput" rows="10" cols="40" readonly></textarea>
+          </article>
+          <script>
+            const bookform =  document.getElementById('bookform');
+            document.getElementById('getbook').addEventListener('click', async ()=>{
+              const t = await fetch(`/api/v1/book/${bookform.id.value}`, {credentials: 'include'});
+              const u = await t.json();
+              document.getElementById('kashioutput').value=JSON.stringify(u);
+            },false);
+            document.getElementById('rent').addEventListener('click', async ()=>{
+              const URI = `/api/v1/book/${bookform.id.value}/rent`;
+              console.log('POST',URI);
+              const t = await fetch(URI,{method:"POST", credentials: 'include'});
+              if(t.status===204){
+                document.getElementById('kashioutput').value=`Status ${t.status}`;
+                return;
+              }
+              const u = await t.json();
+              document.getElementById('kashioutput').value=JSON.stringify(u);
+            },false);
+            document.getElementById('return').addEventListener('click', async ()=>{
+              const URI = `/api/v1/book/${bookform.id.value}/return`;
+              console.log('POST', URI);
+              const t = await fetch(URI,{method:"POST", credentials: 'include'});
+              if(t.status===204){
+                document.getElementById('kashioutput').value=`Status ${t.status}`;
+                return;
+              }
+              const u = await t.json();
+              document.getElementById('kashioutput').value=JSON.stringify(u);
+            },false);
+            document.getElementById('book_history').addEventListener('click', async ()=>{
+                const start = bookform.start.value;
+              const URI = `/api/v1/book/${bookform.id.value}/history?${new URLSearchParams({start})}`;
+              console.log('GET',URI)
+              const t = await fetch(URI,{credentials: 'include'});
+              const u = await t.json();
+              document.getElementById('kashioutput').value=JSON.stringify(u);
+            },false);
+          </script>
+        </center></div>
+
+        <div class="col-sm-6"><center>
+          <h2>貸出状況</h2>
+          <article>
+            <form>
+              <label for="id">ユーザID</label><input type="text" name="id" id="user_id" value='c-gengo-kun'>
+              <label for="start">開始位置</label><input type="number" name="start" id="user_retrentstart">
+            </form>
+            <button id="getuserret">ユーザ貸し出し状況</button>
+            </form>
+            <br>
+            <textarea id="useroutput" rows="10" cols="40" readonly></textarea>
+          </article>
+          <script>
+            document.getElementById('getuserret').addEventListener('click', async ()=>{
+              const start = document.getElementById("user_retrentstart").value;
+              const URI = `/api/v1/user/${document.getElementById("user_id").value}/history?${new URLSearchParams({start})}`;
+              console.log('GET',URI)
+              const t = await fetch(URI, {credentials: 'include'});
+              const u = await t.json();
+              document.getElementById('useroutput').value=JSON.stringify(u);
+            },false);
+          </script>
+        </center></div>
+			</div>
+		</div>
+	</section>
+
+  <footer>
+    <center><span style="font-family:'Times New Roman', 'Times';">
+      &copy; 2021 Integrated Quality
+    </span></center>
+  </footer>
+
+	<script src="js/jquery-1.11.0.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.easing.min.js"></script>
+	<script src="js/scrolling-nav.js"></script>
+
+</body>
+</html>
