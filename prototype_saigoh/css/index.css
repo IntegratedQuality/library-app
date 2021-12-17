@@ -1,0 +1,244 @@
+/* //////////////// import //////////////// */
+@import url(http://fonts.googleapis.com/css?family=Lobster);
+
+/* //////////////// header //////////////// */
+
+.header {
+    width: 100%;
+    height: 400px;
+    padding-top: 120px;
+
+    /*　▼　ここに背景画像があるよ！　*/
+    background-image: url(../img/index.jpg);
+    background-position: center center;
+    background-size: cover;
+
+}
+
+
+h1 {
+    /*　▼　ここに文字の大きさ　*/
+    font-size:   40px;
+    /*　▼　ここに文字の色　*/
+    color:
+
+}
+
+@media screen and (max-width: 480px){
+  p{font-size:   60px;}
+}
+
+h2 {
+    /*　▼　ここに文字の大きさ　*/
+    font-size:   30px;
+    /*　▼　ここに文字の色　*/
+    color:
+
+}
+
+h3 {
+    
+    /*　▼　ここに文字の大きさ　*/
+    font-size:  15px;
+    /*　▼　ここに文字の色　*/
+    color:
+
+}
+
+
+
+
+/* //////////////// bootstrap上書き //////////////// */
+.navbar{ background: #11114d !important;
+  max-width: auto;
+}
+
+.navbar a {
+color: #ffffff !important;
+}
+
+
+/* //////////////// ranking //////////////// */
+
+.ranking {
+    padding: 20px 0;
+    background-color: #ddffff;
+    /*　▼　ここに背景画像　*/
+
+}
+
+.copy {
+    border-radius:0px;
+    background: rgba(188,216,235,0.8);
+    padding: 10px 0;
+    /*　▼　ここに横幅　*/
+    width: 60%;
+    /*　▼　ここに枠線　*/
+    border-top: solid 12px #008deb;
+    border-bottom: solid 12px #008deb;
+   /*　▼　ここにマージン　*/
+    margin:0 auto;
+}
+
+.first {
+    font-size: 30px;
+    /*　▼　ここに文字色　*/
+
+}
+
+
+
+/* //////////////// movie //////////////// */
+
+.movie {
+    padding: 20px 0;
+    height: auto;
+    background: #d1ffe8;
+}
+
+.movie-center {
+    width: 600px;
+    margin: 0 auto;
+}
+
+.btn-square1 {
+  display: inline-block;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  background: #00aced;/*ボタン色*/
+  color: #FFF;
+  border-bottom: solid 4px #627295;
+  border-radius: 3px;
+}
+.btn-square1:active {
+  /*ボタンを押したとき*/
+  -webkit-transform: translateY(4px);
+  transform: translateY(4px);/*下に動く*/
+  border-bottom: none;/*線を消す*/
+}
+
+.btn-square2 {
+  display: inline-block;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  background: #e8008d;/*ボタン色*/
+  color: #FFF;
+  border-bottom: solid 4px #627295;
+  border-radius: 3px;
+}
+.btn-square2:active {
+  /*ボタンを押したとき*/
+  -webkit-transform: translateY(4px);
+  transform: translateY(4px);/*下に動く*/
+  border-bottom: none;/*線を消す*/
+}
+
+.btn-square3 {
+  display: inline-block;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  background: #333333;/*ボタン色*/
+  color: #FFF;
+  border-bottom: solid 4px #627295;
+  border-radius: 3px;
+}
+.btn-square3:active {
+  /*ボタンを押したとき*/
+  -webkit-transform: translateY(4px);
+  transform: translateY(4px);/*下に動く*/
+  border-bottom: none;/*線を消す*/
+}
+/* //////////////// Photo //////////////// */
+
+.photo {
+    padding: 20px 0;
+    background-color: #d1ffe8;
+}
+
+.photo img {
+    margin-bottom: 0px;
+}
+
+/* //////////////// Map //////////////// */
+
+.map {
+    height: auto;
+    background-color: #d1ffe8;
+}
+
+.inline-block_test {
+    display:  inline-block;     /* インラインブロック要素にする */
+    background-color:  #ccc;    /* 背景色指定 */
+    width: 250px;               /* 幅指定 */
+    padding:  20px;             /* 余白指定 */
+    margin: 20px;
+}
+
+/* //////////////// extra //////////////// */
+.extra {
+    height: 350px;
+    background-color: #000000;
+}
+
+/* //////////////// footer //////////////// */
+
+footer {
+    background: #000;
+    color: #fff;
+    padding: 10px 0;
+    width: 100%;
+}
+
+
+/* //////////////// common //////////////// */
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+h1{
+    font-family: 'メイリオ', cursive;
+}
+
+h3 {
+    margin-bottom: 20px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+a img:hover {
+    opacity: 0.8;
+}
+
+.outer{
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+/*SNSボタン*/
+
+a.cp_btn {
+    display: block;
+    width: 170px;
+    padding: 0.8em;
+    text-align: center;
+    text-decoration: none;
+    color: #11114d;
+    border: 2px solid #11114d;
+    border-radius: 3px;
+    transition: .4s;
+    float: left;
+    margin: 10px;
+}
+a.cp_btn:hover {
+    background: #11114d;
+    color: #fff;
+}

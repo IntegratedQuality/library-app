@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8">
+	<title>本の一覧</title>
+	<link href="css/bootstrap.css" rel="stylesheet">
+	<link href="css/book.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=yes" />
+</head>
+
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a href="#home" class="navbar-brand page-scroll">Integrated Quality</a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="introduction.html">ご利用案内</a></li>
+　　　　　 <li><a href="book.html">本の一覧</a></li>
+          <li><a href="user.html">ユーザーページ</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+	<header id="home" class="header">
+		<div class="copy text-center">
+			<font face="メイリオ" color=331217><h1><b>本の一覧</b></h1></font>
+			<font face="cursive" color=331217><h2>-Library-</h2></font>
+	  </div>
+	</header>
+
+	<section id="ranking" class="ranking">
+		<div class="container">
+			<div class="row">
+				<h2 class="text-center"><b>資料一覧・検索</b></h2>
+        <div class="col-sm-6"><center>
+          <article>
+            <h2>本の一覧</h2>
+            <form action="/api/v1/books" method="get" id="get">
+              <label for="start">開始位置</label><input type="number" name="start">
+              <input type="submit" value="取得">
+            </form>
+            <textarea id="getoutput" rows="10" cols="40" readonly></textarea>
+            <script>
+              const getform =  document.getElementById('get');
+              getform.addEventListener('submit', async (e)=>{
+                e.preventDefault();
+                const start = getform.start.value;
+                const URI = `/api/v1/books?${new URLSearchParams({start})}`;
+                console.log("GET",URI);
+                const t = await fetch(URI, {credentials: 'include'});
+                const u = await t.json();
+                document.getElementById('getoutput').value=JSON.stringify(u);
+              },false);
+            </script>
+          </article>
+        </center></div>
+
+        <div class="col-sm-6"><center>
+          <article>
+            <h2>本の検索</h2>
+            <form action="/api/v1/books/search" method="get" id="search">
+              <label for="q">検索文字列</label><input type="text" name="q" placeholder="Wiki" required>
+              <label for="start">開始位置</label><input type="number" name="start">
+              <input type="submit" value="検索">
+            </form>
+            <textarea id="searchoutput" rows="10" cols="40" readonly></textarea>
+            <script>
+              const searchform =  document.getElementById('search');
+              searchform.addEventListener('submit', async (e)=>{
+                e.preventDefault();
+                const q = searchform.q.value;
+                const start = searchform.start.value;
+                const URI = `/api/v1/books/search?${new URLSearchParams({q,start})}`;
+                console.log("GET",URI);
+                const t = await fetch(URI,{credentials: 'include'});
+                const u = await t.json();
+                document.getElementById('searchoutput').value=JSON.stringify(u);
+              },false);
+            </script>
+          </article>
+        </center></div>
+			</div>
+      <br>
+		</div>
+	</section>
+
+  <section id="photo" class="photo">
+    <div class="container">
+      <div class="row">
+        <h2 class="text-center"><b>書庫データの追加・編集</b></h2>
+        <h3 class="text-center">新しい書籍、資料等が入った場合、書庫データに追加してください。<br>
+          また、既存データに誤植が見られた場合、有志でこちらから編集をお願いします。</h3>
+        <div class="col-sm-6"><center>
+          <article>
+            <h2>新着図書の追加</h2>
+            <form action="/api/v1/books" method="post" id="addbook">
+              <label for="title">本のタイトル</label><input type="text" name="title" />
+              <label for="isbn">ISBN</label><input type="text" name="isbn">
+              <input type="hidden" name="_method" value="PUT">
+              <input type="submit" value="追加">
+            </form>
+            <textarea id="addbookoutput" rows="10" cols="40" readonly></textarea>
+            <script>
+              const addbook =  document.getElementById('addbook');
+              addbook.addEventListener('submit', async (e)=>{
+                e.preventDefault();
+                const title = addbook.title.value;
+                const isbn = addbook.isbn.value;
+                const URI = `/api/v1/books`;
+                console.log("PUT",URI,{title,isbn});
+                const t = await fetch(URI,{method: 'PUT', credentials: 'include',headers: {'Content-Type': 'application/json'},body:JSON.stringify({title,isbn})});
+                const u = await t.json();
+                document.getElementById('addbookoutput').value=JSON.stringify(u);
+              },false);
+            </script>
+          </article>
+        </center></div>
+
+        <div class="col-sm-6"><center>
+          <article>
+            <h2>既存データの更新</h2>
+            <form action="/api/v1/book" method="post" id="editbook">
+              <label for="id">本番号</label><input type="number" name="id" id="book_id" value='1'>
+              <label for="title">本のタイトル</label><input type="text" name="title" />
+              <label for="isbn">ISBN</label><input type="text" name="isbn">
+              <input type="submit" value="更新">
+            </form>
+            <textarea id="editbookoutput" rows="10" cols="40" readonly></textarea>
+            <script>
+              const editbook =  document.getElementById('editbook');
+              editbook.addEventListener('submit', async (e)=>{
+                e.preventDefault();
+                const id = editbook.id.value;
+                const title = editbook.title.value;
+                const isbn = editbook.isbn.value;
+                const URI = `/api/v1/book/${id}/edit`;
+                console.log("POST",URI,{title,isbn});
+                const t = await fetch(URI,{method: 'POST',headers: {'Content-Type': 'application/json'},body:JSON.stringify({title,isbn})});
+                const u = await t.json();
+                document.getElementById('editbookoutput').value=JSON.stringify(u);
+              },false);
+            </script>
+          </article>
+        </center></div>
+      </div>
+      <br>
+    </div>
+  </section>
+
+
+<section id="photo" class="photo">
+    <div class="container">
+      <div class="row">
+        <h2 class="text-center"><b>書庫データの追加・編集</b></h2>
+        <h3 class="text-center">新しい書籍、資料等が入った場合、書庫データに追加してください。<br>
+          また、既存データに誤植が見られた場合、有志でこちらから編集をお願いします。</h3>
+        <center>
+          <article>
+            <h2>書誌情報取得</h2>
+            <div>
+              <table>
+                <thead>
+                  <tr><th>ISBN</th><th>書誌情報</th><th>書影</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>9784000029353</td><td>無</td><td>-</td></tr>
+                  <tr><td>9784863542174</td><td>有</td><td>無</td></tr>
+                  <tr><td>9784812483800</td><td>有</td><td>有</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <form action="" method="get" id="getbookdata">
+              <label for="isbn">ISBN</label>
+              <input type="text" id="isbn" name="isbn" value="9784812483800">
+              <input type="submit" value="取得">
+            </form>
+            <img src="" alt="書影" id="calligraphy">
+            <textarea id="getbookdata-output" rows="10" cols="40" readonly></textarea>
+            <script>
+              const fetchBookData = async (isbn) => {
+                const URI = `https://api.openbd.jp/v1/get?${new URLSearchParams({ isbn } )}`;
+                console.log("GET", URI);
+                const t = await fetch(URI);
+                const u = await t.json();
+                return u[0];
+              }
+              const getbookdata = document.getElementById('getbookdata');
+              getbookdata.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const isbn = getbookdata.isbn.value;
+                const data = await fetchBookData(isbn);
+                console.log(data);
+                if (data === null) {
+                  console.log('openDB上にデータがありません');
+                }
+                // 書影を反映
+                const calligraphy = document.getElementById('calligraphy');
+                try {
+                  const URL = data.onix.CollateralDetail.SupportingResource[0].ResourceVersion[0].ResourceLink;
+                  console.log('image URL', URL);
+                  calligraphy.setAttribute('src', URL);
+                } catch (error) {
+                  calligraphy.setAttribute('src', '');
+                  console.error(error);
+                }
+                document.getElementById('getbookdata-output').value = JSON.stringify(data);
+              }, false);
+            </script>
+          </article>
+        </center>
+      </div>
+    </div>
+  </section>
+
+
+  <footer>
+    <center><span style="font-family:'Times New Roman', 'Times';">
+      &copy; 2021 Integrated Quality
+    </span></center>
+  </footer>
+
+	<script src="js/jquery-1.11.0.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.easing.min.js"></script>
+	<script src="js/scrolling-nav.js"></script>
+
+</body>
+</html>
