@@ -1,6 +1,6 @@
 const passportStub = require('passport-stub');
 const request = require('supertest');
-const app = require('../src/app');
+const app = require('../src/backend/app');
 
 const {initDetabase} = require('../src/util/accessdb');
 

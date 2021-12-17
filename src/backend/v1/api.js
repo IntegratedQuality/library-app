@@ -11,8 +11,8 @@ const {
   returnBook,
   getRentAllBooksByBook,
   getRentAllBooksByUser,
-} = require('../util/accessdb');
-const ISBN = require('../util/isbn');
+} = require('../../util/accessdb');
+const ISBN = require('../../util/isbn');
 
 // 必要に応じて切り分けてちょ
 
@@ -91,7 +91,7 @@ router.post('/book/:id/edit',async (req,res) => {
       res.status(400).json({
         'errorMessage': 'title must not empty'
       });
-      
+
       return;
     }
   }

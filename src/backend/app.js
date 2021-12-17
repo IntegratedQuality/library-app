@@ -1,5 +1,6 @@
 const express = require('express');
 const PORT = process.env.PORT || 3000;
+const mysql = require('mysql');
 
 
 const app = express();
@@ -16,7 +17,7 @@ require('./auth')(app);
 const apirouter = require('./v1/api');
 app.use('/api/v1/', apirouter);
 
-app.listen(PORT,()=>{
+app.listen(PORT,async ()=>{
   console.log(`listen http://localhost:${PORT}`);
 });
 

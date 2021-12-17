@@ -4,11 +4,11 @@ const LocalStrategy = require('passport-local');
 const {
   getUserById,
   changeUserName,
-} = require('./util/accessdb');
+} = require('../util/accessdb');
 const {
   confirmPassword,
   signupUser,
-} = require('./util/password');
+} = require('../util/password');
 
 module.exports = (app) => {
   passport.serializeUser((user, done) => {
@@ -30,7 +30,7 @@ module.exports = (app) => {
     saveUninitialized: false,
     // store: ...
   }));
-  
+
   app.use(passport.initialize());
   app.use(passport.session());
   // サインアップ
@@ -41,7 +41,7 @@ module.exports = (app) => {
       },(err, user, info) => {
         if(err) return  res.status(400).json({message: 'なぜここでエラー？'});
         if(!user) return res.status(400).json(info);
-        
+
         req.logIn(user, async (err) => {
           if(err) {
             return res.status(400).json({message: 'サインアップ失敗'});
@@ -56,7 +56,7 @@ module.exports = (app) => {
         });
       })(req, res);
   });
-  
+
   app.post('/api/v1/login', (req, res, next) => {
     passport.authenticate('local',
       {
@@ -64,7 +64,7 @@ module.exports = (app) => {
       },(err, user, info) => {
         if(err) return  res.status(400).json({message: 'なぜここでエラー？'});
         if(!user) return res.status(400).json(info);
-        
+
         req.logIn(user, (err) => {
           if(err) {
             return res.status(400).json({message: 'ログイン失敗'});
@@ -76,7 +76,7 @@ module.exports = (app) => {
           });
         });
         next();
-      })(req, res, next); 
+      })(req, res, next);
   });
   app.post('/logout', (req, res) => {
     if (!req.isAuthenticated()) {
